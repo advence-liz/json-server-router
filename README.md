@@ -1,6 +1,6 @@
 # json-server-router
 
-json-server-router 是 json-server 中间件,其作用是提供一个简明的方式构建出各种路由接口
+json-server-router 是 json-server 中间件, 其作用是  提供一个简明的方式构建出各种路由接口
 
 ## json-server
 
@@ -38,7 +38,7 @@ or
       +index.json // 在index.json中添加update
 ```
 
-简单的路由生成示意大概下面这个样子,`src`为mock文件的根目录
+简单的路由生成示意大概下面这个样子,`src`为 mock 文件的根目录
 
 ```bash
 src/books/index.json
@@ -49,3 +49,41 @@ src/books/index.json
    + index.json  ------>  /foo/xxx
    + bar.json    ------>  /foo/bar/xxx
 ```
+
+## 安装
+
+```bash
+$ yarn add json-server-router
+```
+
+## demo
+
+```js
+const jsonServer = require("json-server")
+const server = jsonServer.create()
+const middlewares = jsonServer.defaults() // { static: 'public' }
+const JsonServerRouter = require("../index.js")
+/**
+ * @prop {string} root mock文件根目录默认为 'mock'
+ * @prop {number} port 端口号跟json-server 一致 默认为 3000
+ * @prop {string} publicPath 生成默认首页的地址，跟json-server 一致默认为 'public'
+ */
+
+const router = new JsonServerRouter({
+  root: "mock",
+  port: 3000,
+  publicPath: "public"
+})
+
+server.use(middlewares)
+
+server.use(router.routes())
+
+server.listen(3000, () => {
+  console.log("JSON Server is running")
+})
+```
+
+## 演示
+
+![e](doc/demo.gif)

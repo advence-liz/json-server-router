@@ -1,15 +1,15 @@
 {
-  "name": "mock",
+  "name": "json-server-router",
   "version": "1.0.0",
-  "description": "test json-server",
+  "description": "json-server-router middleware of json-server for building mock interface more effective",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env DEBUG=deer nodemon --inspect example/index.js",
     "start": "node example/index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "advence-liz",
+  "license": "MIT",
   "dependencies": {
     "debug": "^4.1.0",
     "fs-extra": "^7.0.1",
@@ -20,6 +20,29 @@
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
+    "eslint": "^5.8.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
     "mockjs": "^1.0.1-beta3"
-  }
+  },
+  "directories": {
+    "example": "example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/advence-liz/json-server-router.git"
+  },
+  "keywords": [
+    "json-server",
+    "json-server-middleware",
+    "middleware",
+    "json-server-router"
+  ],
+  "bugs": {
+    "url": "https://github.com/advence-liz/json-server-router/issues"
+  },
+  "homepage": "https://github.com/advence-liz/json-server-router#readme"
 }
