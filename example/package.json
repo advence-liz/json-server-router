@@ -1,11 +1,13 @@
 {
-  "name": "mock",
+  "name": "example",
   "version": "1.0.0",
-  "description": "test json-server",
+  "description": "test json-server-router",
   "main": "index.js",
+  "private": true,
   "scripts": {
+    "prestart": "npm install",
     "start": "node index.js",
-    "dev":"nodemon --inspect index.js"
+    "dev": "nodemon --inspect index.js"
   },
   "author": "",
   "license": "ISC",

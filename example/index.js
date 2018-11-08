@@ -1,7 +1,7 @@
-const jsonServer = require("json-server")
+const jsonServer = require('json-server')
 const server = jsonServer.create()
 const middlewares = jsonServer.defaults() // { static: 'public' }
-const JsonServerRouter = require("../index.js")
+const JsonServerRouter = require('../index')
 /**
  * @prop {string} root mock文件根目录默认为 'mock'
  * @prop {number} port 端口号跟json-server 一致
@@ -9,9 +9,9 @@ const JsonServerRouter = require("../index.js")
  */
 
 const router = new JsonServerRouter({
-  root: "mock",
+  root: 'mock',
   port: 3000,
-  publicPath: "public"
+  publicPath: 'public'
 })
 
 server.use(middlewares)
@@ -19,5 +19,5 @@ server.use(middlewares)
 server.use(router.routes())
 
 server.listen(3000, () => {
-  console.log("JSON Server is running")
+  console.log('JSON Server is running')
 })
