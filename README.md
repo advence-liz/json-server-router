@@ -1,6 +1,6 @@
 # json-server-router
 
-json-server-router是[json-server]((https://github.com/typicode/json-server))中间件,其作用是提供一个简明的方式构建出各种路由接口
+json-server-router是[json-server](https://github.com/typicode/json-server)中间件,其作用是提供一个简明的方式构建出各种路由接口
 
 ## json-server
 
