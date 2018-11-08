@@ -68,7 +68,7 @@ const JsonServerRouter = require("../index.js")
 /**
  * @prop {string} root mock文件根目录默认为 'mock'
  * @prop {number} port 端口号跟json-server 一致 默认为 3000
- * @prop {string} publicPath 生成默认首页的地址，跟json-server 一致默认为 'public'
+ * @prop {string} publicPath 生成默认首页的地址，跟json-server 配置一致 默认'public',如果修改路径的话那么json-server 对应的配置也要改
  */
 
 const router = new JsonServerRouter({
@@ -89,3 +89,7 @@ server.listen(3000, () => {
 ## 演示
 
 ![e](doc/demo.gif)
+
+## 已知问题
+
+- 如果当前`publicPath`对应的目录不存在，虽然运行`json-server-router`会自动生成目录但是此时默认打开的首页还是`json-server`的默认主页，而不是`json-server-router`生成的首页不过接口依然是有效的,解决方案就是再运行一遍

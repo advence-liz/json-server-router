@@ -7,7 +7,7 @@
   "scripts": {
     "prestart": "npm install",
     "start": "node index.js",
-    "dev": "nodemon --inspect index.js"
+    "dev": "cross-env DEBUG=json-server-router nodemon --inspect index.js"
   },
   "author": "",
   "license": "ISC",

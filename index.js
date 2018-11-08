@@ -1,5 +1,5 @@
 const { green, blue } = require('chalk')
-const debug = require('debug')('deer')
+const debug = require('debug')('json-server-router')
 const glob = require('glob')
 const jsonServer = require('json-server')
 const path = require('path')
@@ -21,13 +21,13 @@ class JsonServerRouter {
       ...{ root: 'mock', port: 3000, publicPath: 'public' },
       ...opts
     }
-    debug('context', path.resolve('root'))
+
     debug('opts', this.opts)
     this.routeStore = []
     this._init()
   }
   get routeSources () {
-    const { root, port } = this.opts
+    const { root } = this.opts
     // 根据process.cwd()
     return glob.sync(`${root}/**/*.{js,json}`)
   }
