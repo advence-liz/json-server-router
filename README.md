@@ -1,8 +1,43 @@
 # json-server-router
 
-json-server-router是[json-server](https://github.com/typicode/json-server)中间件,其作用是提供一个简明的方式构建出各种路由接口
+json-server-router 是[json-server](https://github.com/typicode/json-server)中间件,其作用是提供一个简明的方式构建出各种路由接口
 
 ## json-server
+
+截取部分 json-server 介绍
+
+Getting started
+
+Install JSON Server
+
+npm install -g json-server
+Create a db.json file with some data
+
+```json
+{
+  "posts": [{ "id": 1, "title": "json-server", "author": "typicode" }],
+  "comments": [{ "id": 1, "body": "some comment", "postId": 1 }],
+  "profile": { "name": "typicode" }
+}
+```
+
+Start JSON Server
+
+json-server --watch db.json
+Now if you go to http://localhost:3000/posts/1, you'll get
+
+```js
+{ "id": 1, "title": "json-server", "author": "typicode" }
+```
+
+Also when doing requests, it's good to know that:
+
+If you make POST, PUT, PATCH or DELETE requests, changes will be automatically and safely saved to db.json using lowdb.
+Your request body JSON should be object enclosed, just like the GET output. (for example {"name": "Foobar"})
+Id values are not mutable. Any id value in the body of your PUT or PATCH request will be ignored. Only a value set in a POST request will be respected, but only if not already taken.
+A POST, PUT or PATCH request should include a Content-Type: application/json header to use the JSON in the request body. Otherwise it will result in a 200 OK but without changes being made to the data.
+
+## json-server-router 要解决的问题
 
 在使用 json-server 时你写了如下文件(router.json) 也就代表你得到了四个 mock 接口
 `/update` ,`/retrieve`, `/create` ,`/delete`
