@@ -128,4 +128,4 @@ server.listen(3000, () => {
 
 ## 已知问题
 
-- 如果当前`publicPath`对应的目录不存在，虽然运行`json-server-router`会自动生成目录但是此时默认打开的首页还是`json-server`的默认主页，而不是`json-server-router`生成的首页不过接口依然是有效的,解决方案就是再运行一遍
+- 如果当前`publicPath`对应的目录不存在，虽然运行`json-server-router`会自动生成目录但是此时默认打开的首页还是`json-server`的默认主页，而不是`json-server-router`生成的首页不过接口依然是有效的解决方案就是再运行一遍。
