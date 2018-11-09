@@ -89,6 +89,7 @@ server.listen(3000, () => {
 ## 演示
 
 ![e](doc/demo.gif)
+![cli](doc/cli.gif)
 
 ## 已知问题
 
