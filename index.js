@@ -47,11 +47,12 @@ class JsonServerRouter {
       logDebugInfo(filePath, routes, prefix)
       templateStore.push(new PartTemplate(routes, prefix, filePath).render())
     })
-    publicPath && fs.ensureDirSync(publicPath)
-    publicPath && createTemlate(templateStore, publicPath)
-    publicPath &&
+    if (publicPath) {
+      fs.ensureDirSync(publicPath)
+      createTemlate(templateStore, publicPath)
       console.info(green(`❤️  visit `), blue(`http://localhost:${port}/`))
-    publicPath && opn(`http://localhost:${port}/`)
+      opn(`http://localhost:${port}/`)
+    }
   }
   // 单纯为了跟koa-router 接口一样
   routes () {
@@ -69,9 +70,9 @@ class JsonServerRouter {
   }
 }
 function logDebugInfo (filePath, routes, prefix) {
-  debug(blue('file'), green(filePath))
+  console.info(blue('file'), green(filePath))
   for (let key in routes) {
-    debug(blue(`${prefix}/${key}`))
+    console.info(blue(`${prefix}/${key}`))
   }
 }
 function PartRouter (routes, prefix) {
@@ -92,7 +93,7 @@ function PartTemplate (routes, prefix, filePath) {
   }
 }
 function createTemlate (templateStore, publicPath) {
-  const _template = fs.readFileSync(path.join(__dirname, '_template.ejs'))
+  const _template = fs.readFileSync(path.join(__dirname, '_template.html'))
   fs.writeFileSync(
     path.join(publicPath, 'index.html'),
     _.template(_template)({ body: templateStore.join('\n') })

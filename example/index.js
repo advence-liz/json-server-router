@@ -19,5 +19,5 @@ server.use(middlewares)
 server.use(router.routes())
 
 server.listen(3000, () => {
-  console.log('JSON Server is running')
+  console.info('JSON Server is running')
 })

@@ -1,0 +1,19 @@
+{
+  "uploadPic": {
+    "code": 200,
+    "message": "succeed",
+    "data": {
+      "url": "http://xxxxxx"
+    }
+  },
+  "list": {
+    "code": 200,
+    "message": "",
+    "data": [
+      { "id": 1, "name": "言语骚扰" },
+      { "id": 2, "name": "人身攻击" },
+      { "id": 3, "name": "诈骗" },
+      { "id": 4, "name": "要求不当" }
+    ]
+  }
+}
