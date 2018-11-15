@@ -5,7 +5,6 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "prestart": "npm install",
     "start": "node index.js",
     "dev": "cross-env DEBUG=json-server-router nodemon --inspect index.js"
   },

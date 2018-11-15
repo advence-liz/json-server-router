@@ -1,12 +1,10 @@
 {
   "name": "json-server-router",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "json-server-router middleware of json-server for building mock interface more effective",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env DEBUG=deer nodemon --inspect example/index.js",
-    "start": "node example/index.js"
+    "test": "cd example && npm start"
   },
   "author": "advence-liz",
   "license": "MIT",
