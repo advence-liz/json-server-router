@@ -49,21 +49,31 @@ Now if you go to http://localhost:3000/posts/1, you'll get
 json-server-router 的实现理念是根据目录结构，构建出想要的接口形式
 假设我们的目标接口为 `/aaa/bbb/ccc/update`
 那么我们只需构件出目录结构
-
+当遇到名称为 `index` 的文件路径拼接的时候会忽略`index`，当遇见键值为 `index`路径拼接同样也会忽略`index`
 ```bash
 - aaa
   - bbb
     + ccc.json   // 在ccc.json中添加 update
-
-or
-
+or 
 - aaa
   - bbb
     - ccc
       +index.json // 在index.json中添加update
+
 ```
 
-简单的路由生成示意大概下面这个样子,`src`为 mock 文件的根目录
+### 假设`/books/index.json`内容如下  
+
+```json
+{
+  "index": { "code": 200, "message": "succeed", "data": true }, // /books/
+  "retrieve": { "code": 200, "message": "succeed", "data": true },// /books/retrieve
+  "create": { "code": 200, "message": "succeed", "data": true },// /books/create
+  "delete": { "code": 200, "message": "succeed", "data": true }// /books/delete
+}
+```
+
+### 简单的路由生成示意大概下面这个样子,`src`为 mock 文件的根目录
 
 ```bash
 src/books/index.json
@@ -89,11 +99,13 @@ $ yarn add json-server-router
 const jsonServer = require("json-server")
 const server = jsonServer.create()
 const middlewares = jsonServer.defaults() // { static: 'public' }
-const JsonServerRouter = require("../index.js")
+const JsonServerRouter = require("json-server-router")
+// const JsonServerRouter = require("../index.js")
 /**
  * @prop {string} root mock文件根目录默认为 'mock'
  * @prop {number} port 端口号跟json-server 一致 默认为 3000
  * @prop {string} publicPath 生成默认首页的地址，跟json-server 配置一致 默认'public',如果修改路径的话那么json-server 对应的配置也要改
+ * @prop {bool} open 是否用浏览器打开 默认 true
  */
 
 const router = new JsonServerRouter({
@@ -105,6 +117,7 @@ const router = new JsonServerRouter({
 server.use(middlewares)
 
 server.use(router.routes())
+server.use(router.rewrite())
 
 server.listen(3000, () => {
   console.log("JSON Server is running")

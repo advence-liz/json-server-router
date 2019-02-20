@@ -5,20 +5,23 @@ const jsonServer = require('json-server')
 const path = require('path')
 const fs = require('fs-extra')
 const _ = require('lodash')
+const express = require('express')
+const rewrite = require('express-urlrewrite')
 const opn = require('opn')
 let $IsInit = true
 /**
  * 传入opts
- * @param { Object } opts { root: 'src', port: 3000, publicPath: 'public' }
+ * @param { Object } opts { root: 'src', port: 3000, publicPath: 'public',open:true }
  * @description
- * root mock 文件所在目录
- * port app 端口号需要跟json-server端口号一致用来自动打开页面
- * publicPath 生成首页的路径
+ * root mock 文件所在目录 默认值 'mock'
+ * port app 端口号需要跟json-server端口号一致 默认值 3000
+ * publicPath 生成首页的路径 默认 'public'
+ * open 默认打开浏览器 默认true
  */
 class JsonServerRouter {
   constructor (opts = {}) {
     this.opts = {
-      ...{ root: 'mock', port: 3000, publicPath: 'public' },
+      ...{ root: 'mock', port: 3000, publicPath: 'public', open: true },
       ...opts
     }
 
@@ -32,7 +35,7 @@ class JsonServerRouter {
     return glob.sync(`${root}/**/*.{js,json}`)
   }
   _init () {
-    let { root, publicPath, port } = this.opts
+    let { root, publicPath, port, open } = this.opts
     const templateStore = []
     this.routeSources.forEach(filePath => {
       const prefix = filePath
@@ -51,7 +54,7 @@ class JsonServerRouter {
       fs.ensureDirSync(publicPath)
       createTemlate(templateStore, publicPath)
       console.info(green(`❤️  visit `), blue(`http://localhost:${port}/`))
-      opn(`http://localhost:${port}/`)
+      open && opn(`http://localhost:${port}/`)
     }
   }
   // 单纯为了跟koa-router 接口一样
@@ -62,11 +65,24 @@ class JsonServerRouter {
         this.routeStore.forEach(partRouter => {
           partRouter.getRoutes(app)
         })
-
+        // app.use(this.rewrite()) 没起效在外面调用起效了why?
         $IsInit = false
       }
       next()
     }
+  }
+
+  rewrite () {
+    let { root } = this.opts
+    const router = express.Router()
+    glob.sync(`${root}/**/index.{js,json}`).forEach(filePath => {
+      let prefix = path.parse(filePath.replace(root, '')).dir
+      // 匹配 /books 或者 /books?xx
+      let prefixReg = new RegExp(`(${prefix}\\?[^?/]*)|(^${prefix}$)`)
+      router.use(rewrite(prefixReg, `${prefix}/index`))
+    })
+
+    return router
   }
 }
 function logDebugInfo (filePath, routes, prefix) {
@@ -86,7 +102,8 @@ function PartTemplate (routes, prefix, filePath) {
     )
     arr.push(`<ul>`)
     for (let key in routes) {
-      arr.push(`<li> <a href="${prefix}/${key}">${prefix}/${key} </a></li>`)
+      let uri = `${prefix}/${key}`.replace(/\/index$/, '')
+      arr.push(`<li> <a href="${uri}">${uri} </a></li>`)
     }
     arr.push(`</ul>`)
     return arr.join('\n')
