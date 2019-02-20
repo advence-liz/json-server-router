@@ -4,13 +4,10 @@ json-server-router 是[json-server](https://github.com/typicode/json-server)中�
 
 ## json-server
 
-截取部分 json-server 介绍
+截取部分 [json-server](https://github.com/typicode/json-server) 介绍
 
-Getting started
+`npm install -g json-server`
 
-Install JSON Server
-
-npm install -g json-server
 Create a db.json file with some data
 
 ```json
@@ -23,19 +20,12 @@ Create a db.json file with some data
 
 Start JSON Server
 
-json-server --watch db.json
+`json-server --watch db.json`
 Now if you go to http://localhost:3000/posts/1, you'll get
 
 ```js
 { "id": 1, "title": "json-server", "author": "typicode" }
 ```
-
-Also when doing requests, it's good to know that:
-
-If you make POST, PUT, PATCH or DELETE requests, changes will be automatically and safely saved to db.json using lowdb.
-Your request body JSON should be object enclosed, just like the GET output. (for example {"name": "Foobar"})
-Id values are not mutable. Any id value in the body of your PUT or PATCH request will be ignored. Only a value set in a POST request will be respected, but only if not already taken.
-A POST, PUT or PATCH request should include a Content-Type: application/json header to use the JSON in the request body. Otherwise it will result in a 200 OK but without changes being made to the data.
 
 ## json-server-router 要解决的问题
 
@@ -129,3 +119,7 @@ server.listen(3000, () => {
 ## 已知问题
 
 - 如果当前`publicPath`对应的目录不存在，虽然运行`json-server-router`会自动生成目录但是此时默认打开的首页还是`json-server`的默认主页，而不是`json-server-router`生成的首页不过接口依然是有效的解决方案就是再运行一遍。
+
+## TODO
+
+- [ ] 添加命令启动形式
