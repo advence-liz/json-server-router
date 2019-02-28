@@ -29,7 +29,7 @@ server.use(jsonServer.bodyParser)
 //   next()
 // })
 server.use(router.routes())
-// server.use(router.rewrite())
+server.use(router.rewrite())
 
 server.listen(port, () => {
   console.info(`JSON Server is running on ${port}`)

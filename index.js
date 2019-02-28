@@ -62,7 +62,12 @@ class JsonServerRouter {
     return (req, res, next) => {
       const app = req.app
       if ($IsInit) {
-        this.routeStore.forEach(partRouter => {
+        const compareRegex = /\//g
+        this.routeStore.sort(function (x, y) {
+          return x.prefix.match(compareRegex).length - y.prefix.match(compareRegex).length
+        })
+        
+        this.routeStore.reverse().forEach(partRouter => {
           partRouter.getRoutes(app)
         })
         // app.use(this.rewrite()) 没起效在外面调用起效了why?
@@ -92,7 +97,8 @@ function logDebugInfo (filePath, routes, prefix) {
   }
 }
 function PartRouter (routes, prefix) {
-  this.getRoutes = app => app.use(prefix, jsonServer.router(routes))
+  this.prefix = prefix
+  this.getRoutes = app => app.use(`${prefix}`, jsonServer.router(routes))
 }
 function PartTemplate (routes, prefix, filePath) {
   const arr = []
