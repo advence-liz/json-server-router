@@ -1,0 +1,6 @@
+{
+  "update": { "code": 200, "message": "succeed", "data": true },
+  "retrieve": { "code": 200, "message": "succeed", "data": true },
+  "create": { "code": 200, "message": "succeed", "data": true },
+  "delete": { "code": 200, "message": "succeed", "data": true }
+}
