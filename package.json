@@ -4,7 +4,7 @@
   "description": "json-server-router middleware of json-server for building mock interface more effective",
   "main": "index.js",
   "scripts": {
-    "test": "cd example && npm start"
+    "dev": "cd example && npm run dev"
   },
   "author": "advence-liz",
   "license": "MIT",
