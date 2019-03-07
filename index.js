@@ -35,7 +35,7 @@ class JsonServerRouter {
     return glob.sync(`${root}/**/*.{js,json}`)
   }
   _init () {
-    let { root, publicPath, port, open } = this.opts
+    let { root, publicPath, port, open, host } = this.opts
     const templateStore = []
     this.routeSources.forEach(filePath => {
       const prefix = filePath
@@ -54,6 +54,7 @@ class JsonServerRouter {
       fs.ensureDirSync(publicPath)
       createTemlate(templateStore, publicPath)
       console.info(green(`❤️  visit `), blue(`http://localhost:${port}/`))
+      console.info(green(`❤️  visit `), blue(`http://${host}:${port}/`))
       open && opn(`http://localhost:${port}/`)
     }
   }
@@ -64,9 +65,12 @@ class JsonServerRouter {
       if ($IsInit) {
         const compareRegex = /\//g
         this.routeStore.sort(function (x, y) {
-          return x.prefix.match(compareRegex).length - y.prefix.match(compareRegex).length
+          return (
+            x.prefix.match(compareRegex).length -
+            y.prefix.match(compareRegex).length
+          )
         })
-        
+
         this.routeStore.reverse().forEach(partRouter => {
           partRouter.getRoutes(app)
         })
@@ -96,6 +100,11 @@ function logDebugInfo (filePath, routes, prefix) {
     console.info(blue(`${prefix}/${key}`))
   }
 }
+/**
+ *
+ * @param {object} routes  当前文件输出JavaScript object
+ * @param {string} prefix  路由前缀
+ */
 function PartRouter (routes, prefix) {
   this.prefix = prefix
   this.getRoutes = app => app.use(`${prefix}`, jsonServer.router(routes))
