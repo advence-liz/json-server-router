@@ -34,8 +34,9 @@ server.use(function (req, res, next) {
   // Continue to JSON Server router
   next()
 })
-server.use(router.routes())
 server.use(router.rewrite())
+server.use(router.routes())
+// server.use(router.rewrite())
 
 server.listen(port, () => {
   console.info(`输入rs重新启动mock server`)

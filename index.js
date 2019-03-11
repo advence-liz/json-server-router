@@ -1,4 +1,4 @@
-const { green, blue } = require('chalk')
+const { green, blue, red } = require('chalk')
 const debug = require('debug')('json-server-router')
 const glob = require('glob')
 const jsonServer = require('json-server')
@@ -20,11 +20,8 @@ let $IsInit = true
  */
 class JsonServerRouter {
   constructor (opts = {}) {
-    this.opts = {
-      ...{ root: 'mock', port: 3000, publicPath: 'public', open: true },
-      ...opts
-    }
-
+    this.opts = opts
+    this.opts.root = path.resolve(this.opts.root)
     debug('opts', this.opts)
     this.routeStore = []
     this._init()
@@ -36,7 +33,16 @@ class JsonServerRouter {
   }
   _init () {
     let { root, publicPath, port, open, host } = this.opts
+    // root = path.resolve(root)
     const templateStore = []
+    console.count('__init')
+    try {
+      fs.statSync(path.resolve(root))
+    } catch (error) {
+      console.info(red('no such file or directory'), red(path.resolve(root)))
+      process.exit(0)
+    }
+
     this.routeSources.forEach(filePath => {
       const prefix = filePath
         .replace(/\.(js|json)$/, '')
