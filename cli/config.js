@@ -8,5 +8,6 @@ try {
 }
 module.exports = {
   host: ip.address(),
+  publicPath: 'public',
   ...config
 }

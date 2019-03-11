@@ -24,11 +24,12 @@ const argv = yargs
       description: 'Set port',
       default: 3000
     },
-    // host: {
-    //   alias: 'h',
-    //   type: 'string',
-    //   default: `${ip.address()}`
-    // },
+    simple: {
+      alias: 's',
+      type: 'boolean',
+      description: 'simple pattern',
+      default: false
+    },
     root: {
       alias: 'r',
       type: 'string',

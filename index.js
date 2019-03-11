@@ -63,8 +63,8 @@ class JsonServerRouter {
       logDebugInfo(filePath, routes, prefix)
       templateStore.push(new PartTemplate(routes, prefix, filePath).render())
     })
-    if (publicPath) {
-      fs.ensureDirSync(publicPath)
+    if (fs.existsSync(publicPath)) {
+      // fs.ensureDirSync(publicPath)
       createTemlate(templateStore, publicPath)
       console.info(green(`❤️  visit `), blue(`http://localhost:${port}/`))
       console.info(green(`❤️  visit `), blue(`http://${host}:${port}/`))
@@ -103,7 +103,7 @@ class JsonServerRouter {
       let prefixReg = new RegExp(`(${prefix}\\?[^?/]*)|(^${prefix}$)`)
       router.use(rewrite(prefixReg, `${prefix}/index`))
     })
-
+    
     return router
   }
 }
