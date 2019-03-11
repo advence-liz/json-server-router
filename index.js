@@ -7,8 +7,9 @@ const fs = require('fs-extra')
 const _ = require('lodash')
 const express = require('express')
 const rewrite = require('express-urlrewrite')
+const jph = require('json-parse-helpfulerror')
 const opn = require('opn')
-let $IsInit = true
+
 /**
  * 传入opts
  * @param { Object } opts { root: 'src', port: 3000, publicPath: 'public',open:true }
@@ -24,18 +25,18 @@ class JsonServerRouter {
     this.opts.root = path.resolve(this.opts.root)
     debug('opts', this.opts)
     this.routeStore = []
+    this.$IsInit = true
     this._init()
   }
   get routeSources () {
     const { root } = this.opts
-    // 根据process.cwd()
+
     return glob.sync(`${root}/**/*.{js,json}`)
   }
   _init () {
     let { root, publicPath, port, open, host } = this.opts
-    // root = path.resolve(root)
+
     const templateStore = []
-    console.count('__init')
     try {
       fs.statSync(path.resolve(root))
     } catch (error) {
@@ -50,8 +51,14 @@ class JsonServerRouter {
         .replace(root, '')
       /**
        * @var {Object} routes josn-server 路由对象
+       * @description
+       *  const routes = require(path.resolve(filePath))
+       *  上面的写法会走缓存，如果文件以及修改了变拿不到新值
        */
-      const routes = require(path.resolve(process.cwd(), filePath))
+
+      delete require.cache[filePath]
+      const routes = require(filePath)
+
       this.routeStore.push(new PartRouter(routes, prefix))
       logDebugInfo(filePath, routes, prefix)
       templateStore.push(new PartTemplate(routes, prefix, filePath).render())
@@ -68,7 +75,7 @@ class JsonServerRouter {
   routes () {
     return (req, res, next) => {
       const app = req.app
-      if ($IsInit) {
+      if (this.$IsInit) {
         const compareRegex = /\//g
         this.routeStore.sort(function (x, y) {
           return (
@@ -81,7 +88,7 @@ class JsonServerRouter {
           partRouter.getRoutes(app)
         })
         // app.use(this.rewrite()) 没起效在外面调用起效了why?
-        $IsInit = false
+        this.$IsInit = false
       }
       next()
     }
@@ -101,9 +108,9 @@ class JsonServerRouter {
   }
 }
 function logDebugInfo (filePath, routes, prefix) {
-  console.info(blue('file'), green(filePath))
+  debug(blue('file'), green(filePath))
   for (let key in routes) {
-    console.info(blue(`${prefix}/${key}`))
+    debug(blue(`${prefix}/${key}`))
   }
 }
 /**
@@ -113,6 +120,7 @@ function logDebugInfo (filePath, routes, prefix) {
  */
 function PartRouter (routes, prefix) {
   this.prefix = prefix
+  this.routes = routes
   this.getRoutes = app => app.use(`${prefix}`, jsonServer.router(routes))
 }
 function PartTemplate (routes, prefix, filePath) {

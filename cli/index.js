@@ -2,17 +2,19 @@
 const yargs = require('yargs')
 const ip = require('ip')
 const fs = require('fs')
+const path = require('path')
 const { blue, red, green, bgRed } = require('chalk')
-const run = require('./run')
 const pkg = require('../package.json')
 const updateNotifier = require('update-notifier')
 updateNotifier({ pkg }).notify()
-const host = ip.address()
-console.log(host)
+const run = require('./run')
+const config = require('./config')
+
 const argv = yargs
-  .config({ host: ip.address() })
+  .config(config)
   .config('config', function (configPath) {
-    return JSON.parse(fs.readFileSync(configPath, 'utf-8'))
+    console.log(configPath)
+    return require(configPath)
   })
   .usage('$0 [options]')
   .options({
@@ -23,18 +25,20 @@ const argv = yargs
       default: 3000
     },
     // host: {
-    //   alias: 'h'
+    //   alias: 'h',
+    //   type: 'string',
+    //   default: `${ip.address()}`
     // },
-
     root: {
       alias: 'r',
       type: 'string',
-      description: 'Paths to mock dir(rel'
+      description: 'Paths to mock dir'
     },
     watch: {
       alias: 'w',
       type: 'boolean',
-      description: 'Watch file(s) TODO'
+      description: 'Watch file(s)',
+      default: false
     },
     open: {
       alias: 'o',
@@ -63,19 +67,5 @@ const argv = yargs
     console.error(green('You should be doing'), yargs.help())
     process.exit(1)
   }).argv
-
-let server = run(argv)
-
-process.stdin.on('error', () => {
-  console.log(`  Error, can't read from stdin`)
-  console.log(`  Creating a snapshot from the CLI won't be possible`)
-})
-process.stdin.setEncoding('utf8')
-
-process.stdin.on('data', chunk => {
-  if (chunk.trim().toLowerCase() === 'rs') {
-    console.log(blue(`has changed, reloading...`))
-    server.closeServer()
-    server = run(argv)
-  }
-})
+console.log(argv)
+run(argv)
