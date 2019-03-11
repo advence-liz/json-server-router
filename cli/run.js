@@ -12,8 +12,8 @@ module.exports = argv => {
   process.stdin.setEncoding('utf8')
   process.stdin.on('data', chunk => {
     if (chunk.trim().toLowerCase() === 'rs') {
-      console.log(blue(`          reloading...`))
-      console.log(green(`          please waiting...`))
+      console.log('')
+      console.log(green(`reloading...`))
       console.log('')
       server.closeServer()
       server = createServer(argv)

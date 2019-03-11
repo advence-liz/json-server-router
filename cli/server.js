@@ -1,5 +1,5 @@
 const jsonServer = require('json-server')
-const { blue, red } = require('chalk')
+const { blue, red, green } = require('chalk')
 const JsonServerRouter = require('../index')
 
 /**
@@ -46,6 +46,8 @@ module.exports = function createServer (opts) {
   app.use(router.routes())
 
   const server = app.listen(port, () => {
+    console.info(green(`❤️  visit `), blue(`http://localhost:${port}/`))
+    console.info(green(`❤️  visit `), blue(`http://${host}:${port}/`))
     console.info(blue('输入rs重新启动mock server'))
   })
   process.on('uncaughtException', error => {

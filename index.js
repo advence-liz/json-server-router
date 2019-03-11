@@ -1,5 +1,5 @@
 const { green, blue, red } = require('chalk')
-const debug = require('debug')('json-server-router')
+const debug = require('debug')('jsr:router')
 const glob = require('glob')
 const jsonServer = require('json-server')
 const path = require('path')
@@ -23,7 +23,7 @@ class JsonServerRouter {
   constructor (opts = {}) {
     this.opts = opts
     this.opts.root = path.resolve(this.opts.root)
-    debug('opts', this.opts)
+    debug(this.opts)
     this.routeStore = []
     this.$IsInit = true
     this._init()
@@ -66,8 +66,7 @@ class JsonServerRouter {
     if (fs.existsSync(publicPath)) {
       // fs.ensureDirSync(publicPath)
       createTemlate(templateStore, publicPath)
-      console.info(green(`❤️  visit `), blue(`http://localhost:${port}/`))
-      console.info(green(`❤️  visit `), blue(`http://${host}:${port}/`))
+
       open && opn(`http://localhost:${port}/`)
     }
   }
@@ -103,7 +102,7 @@ class JsonServerRouter {
       let prefixReg = new RegExp(`(${prefix}\\?[^?/]*)|(^${prefix}$)`)
       router.use(rewrite(prefixReg, `${prefix}/index`))
     })
-    
+
     return router
   }
 }
