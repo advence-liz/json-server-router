@@ -3,6 +3,7 @@ const yargs = require('yargs')
 const ip = require('ip')
 const fs = require('fs')
 const path = require('path')
+const debug = require('debug')('jsr:cli')
 const { blue, red, green, bgRed } = require('chalk')
 const pkg = require('../package.json')
 const updateNotifier = require('update-notifier')
@@ -32,10 +33,21 @@ const argv = yargs
       type: 'string',
       default: ip.address()
     },
+    simple: {
+      alias: 's',
+      type: 'boolean',
+      description: 'simple pattern',
+      default: false
+    },
     root: {
       alias: 'r',
       type: 'string',
       description: 'Paths to mock files parent dir'
+    },
+    static: {
+      type: 'string',
+      description: 'Set static files directory(same as json-server)',
+      default: 'public'
     },
     watch: {
       alias: 'w',
@@ -70,5 +82,5 @@ const argv = yargs
     console.error(green('You should be doing'), yargs.help())
     process.exit(1)
   }).argv
-console.log(argv)
+debug(argv)
 run(argv)

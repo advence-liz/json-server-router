@@ -1,3 +1,4 @@
 module.exports = {
-  root: 'example/mock'
+  root: 'mock',
+  simple: true
 }
