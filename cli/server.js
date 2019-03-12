@@ -10,7 +10,16 @@ const JsonServerRouter = require('../index')
  */
 
 module.exports = function createServer (opts) {
-  const { root, host, port, open, simple, static: publicPath } = opts
+  const {
+    root,
+    host,
+    port,
+    open,
+    simple,
+    static: publicPath,
+    handler,
+    queryMap
+  } = opts
   const middlewares = jsonServer.defaults({
     bodyParser: true,
     static: publicPath
@@ -31,20 +40,17 @@ module.exports = function createServer (opts) {
   app.get(jsrPrefix, function (req, res) {
     res.jsonp(router.routeStore)
   })
-  if (simple) {
-    // https://github.com/typicode/json-server/issues/453
-    app.use(function (req, res, next) {
-      if (req.method === 'POST') {
-        // Converts POST to GET and move payload to query params
-        // This way it will make JSON Server that it's GET request
-        req.method = 'GET'
-        req.query = req.body
-      }
-      // Continue to JSON Server router
-      next()
-    })
-  }
 
+  app.use(function (req, res, next) {
+    queryMap.forEach(([_key, key]) => {
+      req.query[_key] = req.query[key]
+    })
+    next()
+  })
+
+  app.put('*', handler)
+  app.delete('*', handler)
+  app.post('*', handler)
   app.use(router.rewrite())
   app.use(router.routes())
 

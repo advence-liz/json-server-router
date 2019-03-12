@@ -1,7 +1,6 @@
 # json-server-router
 
 json-server-router 的作用是提供一个简明的方式构建出拥有任意的路由的 `mock server`
-其底层依赖[json-server](https://github.com/typicode/json-server)所构建，所以在不出意外的情况下同时也拥有`json-server`的所有功能
 
 ## json-server-router 要解决的问题
 
@@ -100,7 +99,7 @@ Examples:
   jsr --root mock --port 3000
 ```  
 
-### 简要说明
+### 参数说明
 
 - `config` 设置配置文件默认配置文件的地址是当前目录的下的`jsr.config.js`
 - `static` 静态资源的地址跟`json-server`是一致的，需要注意的是如果 `static`路径存在的话`json-server-router`会自动创建一个包含所有路由的`index.html`，如果`static`目录不存在，不会自动创建目录生成`index.html`
@@ -114,6 +113,49 @@ module.exports = {
   root: 'mock',
   port: 3000,
 }
+```
+
+## GET
+
+`json-server-router`其底层依赖[json-server](https://github.com/typicode/json-server)所构建，所以在不出意外的情况下同时也拥有`json-server`的所有`GET`请求相关功能
+
+当使用`json-server` 我们可以通过构建路由`/get/users?_page=7&_limit=10`进行分页查询但是`query`的关键词必须是指定的
+在`json-server-router`中可以再`jsr.config.js`中自定义`queryMap`字段来修改关键词的名字，配置好了之后就可以通过`/get/users?page=7&len=10`进行分页查询
+
+```js
+//jsr.config.js
+{
+  queryMap: [['_page', 'page'], ['_limit', 'len']]
+
+}
+```
+
+## POST PUT DELETE
+
+关于非`GET`请求你不需要定义`mock files`，`json-server-router`对所有非`GET`请求进行统一处理不管其路由是什么一致通过handler函数处理
+
+你可以通过重写`jsr.config.js`中的handler 函数自定义其处理结果
+
+```js
+//jsr.config.js
+ {
+ /**
+   * 处理所有非GET请求
+   * 当query fial 有值的时候认为请求设置为失败状态
+   */
+  handler (req, res, next) {
+    const { ip, originalUrl, body } = req
+    const isFail = !!req.query.fail
+    res.json({
+      code: isFail ? 500 : 200,
+      message: isFail ? 'failed' : 'succeed',
+      cookie: req.get('cookie'),
+      ip,
+      url: originalUrl,
+      body: body
+    })
+  }
+ }
 ```
 
 ## tips

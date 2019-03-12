@@ -3,5 +3,9 @@
   "retrieve": { "code": 200, "message": "succeed", "data": true },
   "create": { "code": 200, "message": "succeed", "data": true },
   "delete": { "code": 200, "message": "succeed", "data": true },
-  "name": [{ "name": "liz" }, { "name": "cc" }]
+  "list": [
+    { "id": 0, "name": "book1" },
+    { "id": 1, "name": "book2" },
+    { "id": 2, "name": "book3" }
+  ]
 }

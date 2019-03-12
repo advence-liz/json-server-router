@@ -6,6 +6,22 @@ try {
 } catch (error) {
   debug(error)
 }
+const handler = (req, res, next) => {
+  const { ip, originalUrl, body } = req
+  res.json({
+    code: 0,
+    message: 'succeed',
+    cookie: req.get('cookie'),
+    ip,
+    url: originalUrl,
+    body: body
+  })
+}
+const queryMap = []
 module.exports = {
-  ...config
+  ...{
+    handler,
+    queryMap,
+    ...config
+  }
 }
