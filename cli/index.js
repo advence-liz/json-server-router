@@ -12,10 +12,14 @@ const config = require('./config')
 
 const argv = yargs
   .config(config)
-  .config('config', function (configPath) {
-    console.log(configPath)
-    return require(configPath)
-  })
+  .config(
+    'config',
+    'Path to JSON config file  [string] [default: jsr.config.js]',
+    function (configPath) {
+      console.log(configPath)
+      return require(configPath)
+    }
+  )
   .usage('$0 [options]')
   .options({
     port: {
@@ -24,15 +28,14 @@ const argv = yargs
       description: 'Set port',
       default: 3000
     },
-    // host: {
-    //   alias: 'h',
-    //   type: 'string',
-    //   default: `${ip.address()}`
-    // },
+    host: {
+      type: 'string',
+      default: ip.address()
+    },
     root: {
       alias: 'r',
       type: 'string',
-      description: 'Paths to mock dir'
+      description: 'Paths to mock files parent dir'
     },
     watch: {
       alias: 'w',

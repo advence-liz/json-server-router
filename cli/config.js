@@ -1,12 +1,11 @@
+const debug = require('debug')('jsr:cli')
 const path = require('path')
-const ip = require('ip')
 let config = {}
 try {
-  config = require(path.resolve('./jsrrc.js'))
+  config = require(path.resolve('./jsr.config.js'))
 } catch (error) {
-  console.log(error)
+  debug(error)
 }
 module.exports = {
-  host: ip.address(),
   ...config
 }
