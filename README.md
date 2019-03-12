@@ -23,7 +23,8 @@ json-server-router 的作用是提供一个简明的方式构建出拥有任意�
 
 json-server-router 的实现理念是根据目录结构，构建出想要的接口形式
 假设我们的目标接口为 `/aaa/bbb/ccc/update`
-那么我们只需构件出对应的目录结构
+那么我们只需构件出如下的目录结构
+
 当遇到名称为 `index` 的文件路径拼接的时候会忽略`index`，当遇见键值为 `index`路径拼接同样也会忽略`index`
 
 ```bash
@@ -39,18 +40,7 @@ or
 
 ```
 
-### 假设`/books/index.json`内容如下  
-
-```json
-{
-  "index": { "code": 200, "message": "succeed", "data": true }, // /books/
-  "retrieve": { "code": 200, "message": "succeed", "data": true },// /books/retrieve
-  "create": { "code": 200, "message": "succeed", "data": true },// /books/create
-  "delete": { "code": 200, "message": "succeed", "data": true }// /books/delete
-}
-```
-
-### 简单的路由生成示意大概下面这个样子,`mock`为 mock 文件的根目录
+## 路由生成示意大概下面这个样子,`mock`为 mock 文件的根目录
 
 ```bash
 mock/books/index.json
@@ -62,9 +52,22 @@ mock/books/index.json
    + bar.json    ------>  /foo/bar/xxx
 ```
 
+## 假设`/books/index.json`内容如下  
+
+将对应生成四个接口 `/books/` `/books/retrieve` `/books/create` `/books/delete`
+
+```json
+{
+  "index": { "code": 200, "message": "succeed", "data": true }, // /books/
+  "retrieve": { "code": 200, "message": "succeed", "data": true },// /books/retrieve
+  "create": { "code": 200, "message": "succeed", "data": true },// /books/create
+  "delete": { "code": 200, "message": "succeed", "data": true }// /books/delete
+}
+```
+
 ## 安装&使用
 
-当前全局安装之后你会得到一个叫`jsr`的全局命令,根据前面的介绍这时候其实你只需构件出一个`mock files` 的根目录就足够了
+当前全局安装之后你会得到一个叫`jsr`的全局命令,根据前面的介绍这时候其实你只需构件出一个包含`mock files` 的根目录就足够了
 
 ```bash
 $ npm install json-server-router -g
@@ -112,6 +115,12 @@ module.exports = {
   port: 3000,
 }
 ```
+
+## tips
+
+- 当`jsr`运行起来之后在命令窗口键入`rs`会重新加载
+  
+- 当`static`路径存在的时候，路由`/jsr` 会返回所有路由信息，当`static`路径存在的时候路由`/`会返回所有路由信息
 
 ## 战斗人员可以作为`json-server`中间件引用
 
