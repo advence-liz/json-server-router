@@ -85,7 +85,6 @@ Options:
   --config           Path to JSON config file  [string] [default:jsr.config.js]
   --port, -p         Set port                    [number] [default: 3000]
   --host                                [string] [default: "10.11.6.185"]
-  --simple, -s       simple pattern            [boolean] [default: false]
   --static           Set static files directory(same as json-server)
                                              [string] [default: "public"]
   --watch, -w        Watch file(s)             [boolean] [default: false]
