@@ -1,4 +1,5 @@
 const jsonServer = require('json-server')
+const fs = require('fs')
 const { blue, red, green } = require('chalk')
 const JsonServerRouter = require('../index')
 
@@ -25,7 +26,9 @@ module.exports = function createServer (opts) {
 
   app.use(middlewares)
 
-  app.get('/jsr', function (req, res) {
+  const jsrPrefix = fs.existsSync(publicPath) ? `/jsr` : '/'
+
+  app.get(jsrPrefix, function (req, res) {
     res.jsonp(router.routeStore)
   })
   if (simple) {
@@ -56,7 +59,7 @@ module.exports = function createServer (opts) {
         red(
           `Cannot bind to the port ${
             error.port
-          }. Please specify another port number either through --port argument or through the json-server.json configuration file`
+          }. Please specify another port number either through --port argument or through the jsr.config.js configuration file`
         )
       )
     } else console.log('Some error occurred', error)
