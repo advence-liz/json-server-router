@@ -15,7 +15,7 @@ const argv = yargs
   .config(config)
   .config(
     'config',
-    'Path to JSON config file  [string] [default: jsr.config.js]',
+    'Path to JSON config file [string] [default: jsr.config.js]',
     function (configPath) {
       console.log(configPath)
       return require(configPath)
