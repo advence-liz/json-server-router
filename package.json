@@ -1,6 +1,6 @@
 {
   "name": "json-server-router",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "description": "json-server-router middleware of json-server for building mock interface more effective",
   "main": "index.js",
   "scripts": {
