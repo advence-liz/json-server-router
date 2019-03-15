@@ -85,9 +85,7 @@ Options:
   --config           Path to JSON config file  [string] [default:jsr.config.js]
   --port, -p         Set port                    [number] [default: 3000]
   --host                                [string] [default: "local ip"]
-  --simple, -s       simple pattern            [boolean] [default: false]
-  --static           Set static files directory(same as json-server)
-                                             [string] [default: "public"]
+  --static           Set static files directory(same as json-server) [string] [default: "public"]
   --watch, -w        Watch file(s)             [boolean] [default: false]
   --open, -o         open                      [boolean] [default: false]
   --middlewares, -m  Paths to middleware files TODO               [array]
@@ -103,7 +101,6 @@ Examples:
 
 - `config` 设置配置文件默认配置文件的地址是当前目录的下的`jsr.config.js`
 - `static` 静态资源的地址跟`json-server`是一致的，需要注意的是如果 `static`路径存在的话`json-server-router`会自动创建一个包含所有路由的`index.html`，如果`static`目录不存在，不会自动创建目录生成`index.html`
-- `simple` 默认情况下`json-server`的`post`类型接口是向文件添加数据，当设置`simple`为`true`的时候`post`行为会变成跟`get`一致直接返回mock data
 - `watch` 监控文件变化自动重新加载
 
 ## `jsr.config.js` simple

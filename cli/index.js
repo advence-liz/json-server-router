@@ -33,12 +33,6 @@ const argv = yargs
       type: 'string',
       default: ip.address()
     },
-    simple: {
-      alias: 's',
-      type: 'boolean',
-      description: 'simple pattern',
-      default: false
-    },
     root: {
       alias: 'r',
       type: 'string',
