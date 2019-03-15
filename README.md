@@ -1,6 +1,6 @@
 # json-server-router
 
-json-server-router 的作用是提供一个简明的方式构建出拥有任意的路由的 `mock server`
+[json-server-router](https://github.com/advence-liz/json-server-router) 的作用是提供一个简明的方式构建出拥有任意的路由的 `mock server`
 
 ## json-server-router 要解决的问题
 
@@ -84,7 +84,7 @@ Options Required:
 Options:
   --config           Path to JSON config file  [string] [default:jsr.config.js]
   --port, -p         Set port                    [number] [default: 3000]
-  --host                                [string] [default: "10.11.6.185"]
+  --host                                [string] [default: "local ip"]
   --simple, -s       simple pattern            [boolean] [default: false]
   --static           Set static files directory(same as json-server)
                                              [string] [default: "public"]
