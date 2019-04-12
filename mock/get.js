@@ -1,7 +1,7 @@
 const users = () => {
   const users = []
   // Create 1000 users
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 1; i++) {
     users.push({ id: i, name: `user${i}` })
   }
   return users

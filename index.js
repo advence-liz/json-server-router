@@ -7,9 +7,8 @@ const fs = require('fs-extra')
 const _ = require('lodash')
 const express = require('express')
 const rewrite = require('express-urlrewrite')
-const jph = require('json-parse-helpfulerror')
 const opn = require('opn')
-
+const parseName = require('./lib/parseName')
 /**
  * 传入opts
  * @param { Object } opts { root: 'src', port: 3000, publicPath: 'public',open:true }
@@ -25,6 +24,7 @@ class JsonServerRouter {
     this.opts.root = path.resolve(this.opts.root)
     debug(this.opts)
     this.routeStore = []
+    this.forceGet = []
     this.$IsInit = true
     this._init()
   }
@@ -49,6 +49,7 @@ class JsonServerRouter {
         .replace(/\.(js|json)$/, '')
         .replace(/\/index$/, '')
         .replace(root, '')
+
       /**
        * @var {Object} routes josn-server 路由对象
        * @description
@@ -58,7 +59,18 @@ class JsonServerRouter {
 
       delete require.cache[filePath]
       const routes = require(filePath)
-
+      /**
+       * 遍历对象键值解析出路径中配置目前就支持get
+       */
+      Object.keys(routes).forEach(key => {
+        let { name: parsedKey, get } = parseName(key)
+        if (parsedKey !== key) {
+          routes[parsedKey] = routes[key]
+          delete routes[key]
+          this.forceGet.push(path.join(prefix, parsedKey))
+          debug('forceGet', this.forceGet)
+        }
+      })
       this.routeStore.push(new PartRouter(routes, prefix))
       logDebugInfo(filePath, routes, prefix)
       templateStore.push(new PartTemplate(routes, prefix, filePath).render())
@@ -92,7 +104,7 @@ class JsonServerRouter {
       next()
     }
   }
-
+  // 对所有的xxx/index.{js,json}添加处理让路由xxx/ rewrite 到 xxx/index
   rewrite () {
     let { root } = this.opts
     const router = express.Router()
