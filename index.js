@@ -88,11 +88,17 @@ class JsonServerRouter {
       const app = req.app
       if (this.$IsInit) {
         const compareRegex = /\//g
+
         this.routeStore.sort(function (x, y) {
-          return (
-            x.prefix.match(compareRegex).length -
-            y.prefix.match(compareRegex).length
-          )
+          const xlen =
+            (x.prefix.match(compareRegex) &&
+              x.prefix.match(compareRegex).length) ||
+            0
+          const ylen =
+            (y.prefix.match(compareRegex) &&
+              y.prefix.match(compareRegex).length) ||
+            0
+          return xlen - ylen
         })
 
         this.routeStore.reverse().forEach(partRouter => {
