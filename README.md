@@ -167,11 +167,13 @@ module.exports = {
  }
 ```
 
-## 但是有的时候你可以能需要非GET请求得到跟GET请求一样的行为
+## jsr魔法注释
+
+### 有的时候你可以能需要非GET请求得到跟GET请求一样的行为
 
 为了完成将非GET请求跟GET一致的行为,对 mock 数据添加了配置 `"list[get]"`生成的路由不会包含`[get]` 当用POST 访问 `/xxxx/list`时就会得到mock文件中定义的数据
 
-```js
+```json
 {
   "list[get]": [
     { "id": 0, "name": "book1" },
@@ -179,8 +181,39 @@ module.exports = {
     { "id": 2, "name": "book3" }
   ]
 }
-
 ```
+### 文件上传功能
+
+jsr支持文件上传功能只要添加file注释即可`"upload[file]"`,目前上传文件对应的`name`固定为`file`
+
+```json
+{
+  "upload[file]": { "code": 200, "message": "succeed", "data": true }
+}
+```
+
+`/xxxx/upload`返回结果如下：
+
+```json
+{
+    "code": 200,
+    "files": [
+        {
+            "destination": "public/temp",
+            "encoding": "7bit",
+            "fieldname": "file",
+            "filename": "0668151cf3f749154c6b1942abe38ad6",
+            "mimetype": "application/javascript",
+            "originalname": "jsr.config.js",
+            "path": "public/temp/0668151cf3f749154c6b1942abe38ad6",
+            "size": 494
+        }
+    ]
+}
+```
+推一手[httpie](https://httpie.org/)：使用httpie如下命令即可完成上传文件的功能：
+
+`$ http -f  xxxx/upload file@somefile.xx`
 
 ## tips
 
