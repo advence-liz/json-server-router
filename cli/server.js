@@ -1,6 +1,8 @@
 const jsonServer = require('json-server')
+const path = require('path')
 const fs = require('fs')
 const { blue, red, green } = require('chalk')
+const multer = require('multer')
 const JsonServerRouter = require('../index')
 
 /**
@@ -32,7 +34,9 @@ module.exports = function createServer (opts) {
     open,
     publicPath
   })
-
+  const upload = multer({ dest: path.join(publicPath, 'temp') })
+  // const singleUpload = upload.single('file')
+  const multiUpload = upload.array('file', 12)
   app.use(middlewares)
 
   const jsrPrefix = fs.existsSync(publicPath) ? `/jsr` : '/'
@@ -40,7 +44,17 @@ module.exports = function createServer (opts) {
   app.get(jsrPrefix, function (req, res) {
     res.jsonp(router.routeStore)
   })
-
+  app.use(
+    multiUpload,
+    function (req, res, next) {
+      const { originalUrl } = req
+      if (router.fileUpload.includes(originalUrl)) {
+        const { files } = req
+        return res.jsonp({ code: 200, files })
+      }
+      next()
+    }
+  )
   app.use(function (req, res, next) {
     const { originalUrl } = req
     if (router.forceGet.includes(originalUrl)) {
