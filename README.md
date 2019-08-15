@@ -196,6 +196,8 @@ server.listen(3000, () => {
 
 ## 演示
 
+fork 本仓储然后`$ npm i` `npm link` `jsr` 效果将如同下面所示：
+
 ![jsr](doc/jsr.gif)
 ![cli](doc/cli.png)
 ![e](doc/bro.png)
