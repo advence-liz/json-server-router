@@ -1,6 +1,6 @@
 # json-server-router
 
-[json-server-router](https://github.com/advence-liz/json-server-router) 的作用是提供一个简明的方式构建出拥有任意的路由的 `mock server`
+[json-server-router](https://github.com/advence-liz/json-server-router) 的作用是提供一个简明的方式构建出拥有任意的路由的 `mock server`,因为`json-server-router`是对`json-server`的扩展所以要想更好的理解下面的内容最好要先了解[json-server](https://github.com/typicode/json-server)
 
 ## json-server-router 要解决的问题
 
@@ -131,7 +131,19 @@ module.exports = {
 
 关于非`GET`请求你不需要定义`mock files`，`json-server-router`对所有非`GET`请求进行统一处理不管其路由是什么一致通过handler函数处理
 
-你可以通过重写`jsr.config.js`中的handler 函数自定义其处理结果
+### 返回结果如下
+
+```js
+{
+    "body": {},
+    "code": 200,
+    "ip": "::1",
+    "message": "succeed",
+    "url": "/books/"
+}
+```
+
+### 你可以通过重写`jsr.config.js`中的handler 函数自定义其处理结果
 
 ```js
 //jsr.config.js
@@ -153,6 +165,21 @@ module.exports = {
     })
   }
  }
+```
+
+## 但是有的时候你可以能需要非GET请求得到跟GET请求一样的行为
+
+为了完成将非GET请求跟GET一致的行为,对 mock 数据添加了配置 `"list[get]"`生成的路由不会包含`[get]` 当用POST 访问 `/xxxx/list`时就会得到mock文件中定义的数据
+
+```js
+{
+  "list[get]": [
+    { "id": 0, "name": "book1" },
+    { "id": 1, "name": "book2" },
+    { "id": 2, "name": "book3" }
+  ]
+}
+
 ```
 
 ## tips

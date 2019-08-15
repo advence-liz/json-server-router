@@ -42,6 +42,18 @@ module.exports = function createServer (opts) {
   })
 
   app.use(function (req, res, next) {
+    const { originalUrl } = req
+    if (router.forceGet.includes(originalUrl)) {
+      // Converts POST to GET and move payload to query params
+      // This way it will make JSON Server that it's GET request
+      req.method = 'GET'
+      req.query = req.body
+    }
+    // Continue to JSON Server router
+    next()
+  })
+
+  app.use(function (req, res, next) {
     queryMap.forEach(([_key, key]) => {
       req.query[_key] = req.query[key]
     })
