@@ -25,6 +25,7 @@ class JsonServerRouter {
     debug(this.opts)
     this.routeStore = []
     this.forceGet = []
+    this.fileUpload = []
     this.$IsInit = true
     this._init()
   }
@@ -63,12 +64,18 @@ class JsonServerRouter {
        * 遍历对象键值解析出路径中配置目前就支持get
        */
       Object.keys(routes).forEach(key => {
-        let { name: parsedKey, get } = parseName(key)
-        if (parsedKey !== key) {
+        let { name: parsedKey, get = false, file = false } = parseName(key)
+        if (get) {
           routes[parsedKey] = routes[key]
           delete routes[key]
           this.forceGet.push(path.join(prefix, parsedKey))
           debug('forceGet', this.forceGet)
+        }
+        if (file) {
+          routes[parsedKey] = routes[key]
+          delete routes[key]
+          this.fileUpload.push(path.join(prefix, parsedKey))
+          debug('fileUpload', this.fileUpload)
         }
       })
       this.routeStore.push(new PartRouter(routes, prefix))
