@@ -83,7 +83,8 @@ module.exports = function createServer (opts) {
   const server = app.listen(port, () => {
     console.info(green(`❤️  visit `), blue(`http://localhost:${port}/`))
     console.info(green(`❤️  visit `), blue(`http://${host}:${port}/`))
-    console.info(blue('输入rs重新启动mock server'))
+    console.info(green(`❤️  首次启动页面显示异常`), blue(`输入rs刷新mock server`))
+    console.info(green(`❤️  当修改mock文件之后`), blue('输入rs刷新mock server'))
   })
   process.on('uncaughtException', error => {
     if (error.errno === 'EADDRINUSE') {
