@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 const yargs = require('yargs')
 const ip = require('ip')
-const fs = require('fs')
-const path = require('path')
 const debug = require('debug')('jsr:cli')
 const { blue, red, green, bgRed } = require('chalk')
 const pkg = require('../package.json')
@@ -15,7 +13,7 @@ const argv = yargs
   .config(config)
   .config(
     'config',
-    'Path to JSON config file [string] [default: jsr.config.js]',
+    'Path to config file [string] [default: jsr.config.js]',
     function (configPath) {
       console.log(configPath)
       return require(configPath)
@@ -36,7 +34,8 @@ const argv = yargs
     root: {
       alias: 'r',
       type: 'string',
-      description: 'Paths to mock files parent dir'
+      description: 'Paths to mock files parent dir',
+      default: '.'
     },
     static: {
       type: 'string',

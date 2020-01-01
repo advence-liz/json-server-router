@@ -3,25 +3,20 @@ const path = require('path')
 const fs = require('fs')
 const { blue, red, green } = require('chalk')
 const multer = require('multer')
+const createTemplate = require('../lib/createTemplate')
+
 const JsonServerRouter = require('../index')
 
 /**
- * @prop {string} root mock文件根目录默认为 'mock'
- * @prop {number} port 端口号跟json-server 一致
- * @prop {string} publicPath 生成默认首页的地址，跟json-server 一致默认为 'public'
+ * @param {Object} opts - The shape is the same as SpecialType above
+ * @param {string} opts.root mock文件根目录默认为 'mock'
+ * @param {number} opts.port 端口号跟json-server 一致
+ * @param {string} opts.publicPath 生成默认首页的地址，跟json-server 一致默认为 'public'
+ * @param {boolean} opts.open 是否默认打开浏览器
  */
 
 module.exports = function createServer (opts) {
-  const {
-    root,
-    host,
-    port,
-    open,
-    simple,
-    static: publicPath,
-    handler,
-    queryMap
-  } = opts
+  const { root, host, port, open, static: publicPath, handler, queryMap } = opts
   const middlewares = jsonServer.defaults({
     bodyParser: true,
     static: publicPath
@@ -39,22 +34,25 @@ module.exports = function createServer (opts) {
   const multiUpload = upload.array('file', 12)
   app.use(middlewares)
 
-  const jsrPrefix = fs.existsSync(publicPath) ? `/jsr` : '/'
+  // 路由
+  const jsrPrefix = fs.existsSync(publicPath) ? '/jsr' : '/'
+
+  app.get('/', function (req, res) {
+    res.send(createTemplate(router.templateStore))
+  })
 
   app.get(jsrPrefix, function (req, res) {
     res.jsonp(router.routeStore)
   })
-  app.use(
-    multiUpload,
-    function (req, res, next) {
-      const { originalUrl } = req
-      if (router.fileUpload.includes(originalUrl)) {
-        const { files } = req
-        return res.jsonp({ code: 200, files })
-      }
-      next()
+
+  app.use(multiUpload, function (req, res, next) {
+    const { originalUrl } = req
+    if (router.fileUpload.includes(originalUrl)) {
+      const { files } = req
+      return res.jsonp({ code: 200, files })
     }
-  )
+    next()
+  })
   app.use(function (req, res, next) {
     const { originalUrl } = req
     if (router.forceGet.includes(originalUrl)) {
@@ -81,18 +79,22 @@ module.exports = function createServer (opts) {
   app.use(router.routes())
 
   const server = app.listen(port, () => {
-    console.info(green(`❤️  visit `), blue(`http://localhost:${port}/`))
-    console.info(green(`❤️  visit `), blue(`http://${host}:${port}/`))
-    console.info(green(`❤️  首次启动页面显示异常`), blue(`输入rs刷新mock server`))
-    console.info(green(`❤️  当修改mock文件之后`), blue('输入rs刷新mock server'))
+    console.info(green('❤️  visit '), blue(`http://localhost:${port}/`))
+    console.info(green('❤️  visit '), blue(`http://${host}:${port}/`))
+    console.info(
+      green('❤️  查查所有mock路由以及数据源'),
+      blue(`http://${host}:${port}${jsrPrefix}`)
+    )
+    console.info(
+      green('❤️  当修改mock文件之后'),
+      blue('输入 rs 刷新 mock server')
+    )
   })
   process.on('uncaughtException', error => {
     if (error.errno === 'EADDRINUSE') {
       console.log(
         red(
-          `Cannot bind to the port ${
-            error.port
-          }. Please specify another port number either through --port argument or through the jsr.config.js configuration file`
+          `Cannot bind to the port ${error.port}. Please specify another port number either through --port argument or through the jsr.config.js configuration file`
         )
       )
     } else console.log('Some error occurred', error)

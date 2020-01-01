@@ -6,13 +6,13 @@ const { blue, green } = require('chalk')
 module.exports = argv => {
   let server = createServer(argv)
   process.stdin.on('error', () => {
-    console.log(`  Error, can't read from stdin`)
+    console.log('  Error, can\'t read from stdin')
   })
   process.stdin.setEncoding('utf8')
   process.stdin.on('data', chunk => {
     if (chunk.trim().toLowerCase() === 'rs') {
       console.log('')
-      console.log(green(` reloading...`))
+      console.log(green(' reloading...'))
       console.log('')
       server.closeServer()
       server = createServer(argv)
@@ -27,7 +27,7 @@ module.exports = argv => {
       })
       .on('all', (event, path) => {
         console.log(blue(`   ${event}       ${path} has changed reloading...`))
-        console.log(green(`          please waiting...`))
+        console.log(green('          please waiting...'))
         console.log('')
         server.closeServer()
         server = createServer(argv)

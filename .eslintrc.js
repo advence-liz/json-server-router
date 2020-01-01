@@ -1,6 +1,10 @@
 module.exports = {
   extends: 'standard',
   rules: {
-    'no-unused-vars': 0
+    indent: ['error', 2],
+    'linebreak-style': ['error', 'unix'],
+    quotes: ['error', 'single'],
+    semi: ['error', 'never'],
+    'no-unused-vars': 1
   }
 }

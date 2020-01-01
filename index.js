@@ -9,6 +9,7 @@ const express = require('express')
 const rewrite = require('express-urlrewrite')
 const opn = require('opn')
 const parseName = require('./lib/parseName')
+
 /**
  * 传入opts
  * @param { Object } opts { root: 'src', port: 3000, publicPath: 'public',open:true }
@@ -26,6 +27,7 @@ class JsonServerRouter {
     this.routeStore = []
     this.forceGet = []
     this.fileUpload = []
+    this.templateStore = []
     this.$IsInit = true
     this._init()
   }
@@ -37,7 +39,6 @@ class JsonServerRouter {
   _init () {
     let { root, publicPath, port, open, host } = this.opts
 
-    const templateStore = []
     try {
       fs.statSync(path.resolve(root))
     } catch (error) {
@@ -61,7 +62,7 @@ class JsonServerRouter {
       delete require.cache[filePath]
       const routes = require(filePath)
       /**
-       * 遍历对象键值解析出路径中配置目前就支持get
+       * 遍历对象键值解析出路径中配置目前就支持get file
        */
       Object.keys(routes).forEach(key => {
         let { name: parsedKey, get = false, file = false } = parseName(key)
@@ -79,15 +80,14 @@ class JsonServerRouter {
         }
       })
       this.routeStore.push(new PartRouter(routes, prefix))
-      logDebugInfo(filePath, routes, prefix)
-      templateStore.push(new PartTemplate(routes, prefix, filePath).render())
+      this.templateStore.push(
+        new PartTemplate(routes, prefix, filePath).render()
+      )
     })
-    if (fs.existsSync(publicPath)) {
-      // fs.ensureDirSync(publicPath)
-      createTemlate(templateStore, publicPath)
+    // if (fs.existsSync(publicPath)) {
 
-      open && opn(`http://localhost:${port}/`)
-    }
+    //   open && opn(`http://localhost:${port}/`)
+    // }
   }
   // 单纯为了跟koa-router 接口一样
   routes () {
@@ -153,20 +153,14 @@ function PartTemplate (routes, prefix, filePath) {
     arr.push(
       ` <h3 class="bg-primary">${prefix} <span class="glyphicon glyphicon-file" aria-hidden="true"></span> <span class="h6" >${filePath}</span></h3>`
     )
-    arr.push(`<ul>`)
+    arr.push('<ul>')
     for (let key in routes) {
       let uri = `${prefix}/${key}`.replace(/\/index$/, '')
       arr.push(`<li> <a href="${uri}">${uri} </a></li>`)
     }
-    arr.push(`</ul>`)
+    arr.push('</ul>')
     return arr.join('\n')
   }
 }
-function createTemlate (templateStore, publicPath) {
-  const _template = fs.readFileSync(path.join(__dirname, '_template.html'))
-  fs.writeFileSync(
-    path.join(publicPath, 'index.html'),
-    _.template(_template)({ body: templateStore.join('\n') })
-  )
-}
+
 module.exports = JsonServerRouter

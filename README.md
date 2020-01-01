@@ -1,6 +1,7 @@
 # json-server-router
 
-[json-server-router](https://github.com/advence-liz/json-server-router) 的作用是提供一个简明的方式构建出拥有任意的路由的 `mock server`,因为`json-server-router`是对`json-server`的扩展所以要想更好的理解下面的内容最好要先了解[json-server](https://github.com/typicode/json-server)
+[json-server-router](https://github.com/advence-liz/json-server-router) 的作用是提供一个简明的方式构建出拥有任意的路由的 `mock server`
+> `json-server-router`是对`json-server`的扩展所以要想更好的理解下面的内容最好要先了解[json-server](https://github.com/typicode/json-server)
 
 ## json-server-router 要解决的问题
 

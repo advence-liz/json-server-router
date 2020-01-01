@@ -8,6 +8,7 @@ try {
 }
 const handler = (req, res, next) => {
   const { ip, originalUrl, body } = req
+  // post 默认直接返回固定信息
   res.json({
     code: 0,
     message: 'succeed',
