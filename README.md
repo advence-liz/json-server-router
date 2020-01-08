@@ -2,17 +2,9 @@
 
 [json-server-router](https://github.com/advence-liz/json-server-router)  简单且强大的 mock server
 
-> `json-server-router`是对`json-server`的扩展所以要想更好的理解下面的内容最好要先了解[json-server](https://github.com/typicode/json-server)
-
-
-## json-server-router 要解决的问题
-
-在使用 json-server 时你写了如下文件(db.json) 也就代表你得到了四个 mock 接口
-`/update` ,`/retrieve`, `/create` ,`/delete`
-但是实际的需求中接口路由肯定不能这么简单你需要的可能是 `/aaa/bbb/ccc/update`这样的形式,虽然`json-server`可以配置`rewrite`可以解决部分问题，但是这并不简单，接下来我们来看一下`json-server-router`的方式
 
 ```json
-// db.json
+
 {
   "update": { "code": 200, "message": "succeed", "data": true },
   "retrieve": { "code": 200, "message": "succeed", "data": true },
@@ -264,3 +256,12 @@ fork 本仓储然后`$ npm i` `npm link` `jsr` 效果将如同下面所示：
 ![jsr](doc/jsr.gif)
 ![cli](doc/cli.png)
 ![e](doc/bro.png)
+
+> `json-server-router`是对`json-server`的扩展所以要想更好的理解下面的内容最好要先了解[json-server](https://github.com/typicode/json-server)
+
+
+## json-server-router 要解决的问题
+
+在使用 json-server 时你写了如下文件(db.json) 也就代表你得到了四个 mock 接口
+`/update` ,`/retrieve`, `/create` ,`/delete`
+但是实际的需求中接口路由肯定不能这么简单你需要的可能是 `/aaa/bbb/ccc/update`这样的形式,虽然`json-server`可以配置`rewrite`可以解决部分问题，但是这并不简单，接下来我们来看一下`json-server-router`的方式
