@@ -31,12 +31,6 @@ const argv = yargs
       type: 'string',
       default: ip.address()
     },
-    root: {
-      alias: 'r',
-      type: 'string',
-      description: 'Paths to mock files parent dir',
-      default: '.'
-    },
     static: {
       type: 'string',
       description: 'Set static files directory(same as json-server)',
@@ -46,13 +40,13 @@ const argv = yargs
       alias: 'w',
       type: 'boolean',
       description: 'Watch file(s)',
-      default: false
+      default: true
     },
     open: {
       alias: 'o',
       type: 'boolean',
       description: 'open',
-      default: true
+      default: false
     },
     middlewares: {
       alias: 'm',
@@ -60,8 +54,22 @@ const argv = yargs
       description: 'Paths to middleware files TODO'
     }
   })
-  .group('root', 'Options Required:')
-  .demandOption('root')
+  .command(
+    '$0 [root]',
+    'welcome',
+    yargs => {
+      yargs.positional('root', {
+        type: 'string',
+        default: '.',
+        describe: 'Paths to mock files dir or file '
+      })
+    },
+    function (argv) {
+      // export DEBUG=jsr:*
+      debug(argv)
+      run(argv)
+    }
+  )
   .example('$0 --root mock')
   .example('$0 --root mock --port 3000')
   .help('help')
@@ -75,5 +83,3 @@ const argv = yargs
     console.error(green('You should be doing'), yargs.help())
     process.exit(1)
   }).argv
-debug(argv)
-run(argv)

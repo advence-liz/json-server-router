@@ -1,5 +1,5 @@
 module.exports = {
-  // root: 'mock',
+  root: 'mock',
   /**
    * 处理所有非GET请求
    * 当query fial 有值的时候认为请求设置为失败状态
@@ -16,6 +16,10 @@ module.exports = {
       body: body
     })
   },
+  /**
+   * 配置分页参数名默认_page,_limit即xxxxx/?_page=1&_limit=10
+   * 配置完毕之后变为xxxxx/?page=1&len=10
+   */
   queryMap: [
     ['_page', 'page'],
     ['_limit', 'len']

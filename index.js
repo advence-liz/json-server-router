@@ -4,7 +4,6 @@ const glob = require('glob')
 const jsonServer = require('json-server')
 const path = require('path')
 const fs = require('fs-extra')
-const _ = require('lodash')
 const express = require('express')
 const rewrite = require('express-urlrewrite')
 const opn = require('opn')
@@ -86,12 +85,10 @@ class JsonServerRouter {
         new PartTemplate(routes, prefix, filePath).render()
       )
     })
-    // if (fs.existsSync(publicPath)) {
 
     open && opn(`http://localhost:${port}/`)
-    // }
   }
-  // 单纯为了跟koa-router 接口一样
+  // 注册各个子路由
   routes () {
     return (req, res, next) => {
       const app = req.app
