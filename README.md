@@ -1,7 +1,6 @@
 # json-server-router
 
-[json-server-router](https://github.com/advence-liz/json-server-router)  简单且强大的 mock server
-
+[json-server-router](https://github.com/advence-liz/json-server-router)  
 
 ```json
 
@@ -65,7 +64,7 @@ mock/books/index.json
 
 ```bash
 $ npm install json-server-router -g
-$ jsr --root mock
+$ jsr  mock
 ```
 
 ## 命令参数

@@ -139,12 +139,7 @@ class JsonServerRouter {
     return router
   }
 }
-function logDebugInfo (filePath, routes, prefix) {
-  debug(blue('file'), green(filePath))
-  for (let key in routes) {
-    debug(blue(`${prefix}/${key}`))
-  }
-}
+
 /**
  *
  * @param {object} routes  当前文件输出JavaScript object
