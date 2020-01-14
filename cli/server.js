@@ -55,7 +55,9 @@ module.exports = function createServer (opts) {
   })
   app.use(function (req, res, next) {
     const { originalUrl } = req
-    if (router.forceGet.includes(originalUrl)) {
+    // split防止url上有额外query影响匹配规则
+    const urlWithoutQuery = originalUrl.split('?')[0]
+    if (router.forceGet.includes(urlWithoutQuery)) {
       // Converts POST to GET and move payload to query params
       // This way it will make JSON Server that it's GET request
       req.method = 'GET'
