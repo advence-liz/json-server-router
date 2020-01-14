@@ -52,7 +52,7 @@ const argv = yargs
       alias: 'o',
       type: 'boolean',
       description: 'open',
-      default: false
+      default: true
     },
     middlewares: {
       alias: 'm',

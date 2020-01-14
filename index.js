@@ -29,28 +29,30 @@ class JsonServerRouter {
     this.fileUpload = []
     this.templateStore = []
     this.$IsInit = true
+    this.isFile = false
     this._init()
   }
   get routeSources () {
     const { root } = this.opts
-
-    return glob.sync(`${root}/**/*.{js,json}`)
-  }
-  _init () {
-    let { root, publicPath, port, open, host } = this.opts
-
+    let stat = null
     try {
-      fs.statSync(path.resolve(root))
+      stat = fs.statSync(path.resolve(root))
+      this.isFile = stat.isFile()
     } catch (error) {
       console.info(red('no such file or directory'), red(path.resolve(root)))
       process.exit(0)
     }
 
+    return this.isFile ? [root] : glob.sync(`${root}/**/*.{js,json}`)
+  }
+  _init () {
+    let { root, publicPath, port, open, host } = this.opts
+
     this.routeSources.forEach(filePath => {
       const prefix = filePath
         .replace(/\.(js|json)$/, '')
         .replace(/\/index$/, '')
-        .replace(root, '')
+        .replace(this.isFile ? path.parse(root).dir : root, '')
 
       /**
        * @var {Object} routes josn-server 路由对象
@@ -86,7 +88,7 @@ class JsonServerRouter {
     })
     // if (fs.existsSync(publicPath)) {
 
-    //   open && opn(`http://localhost:${port}/`)
+    open && opn(`http://localhost:${port}/`)
     // }
   }
   // 单纯为了跟koa-router 接口一样

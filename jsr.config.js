@@ -1,5 +1,5 @@
 module.exports = {
-  root: 'mock',
+  // root: 'mock',
   /**
    * 处理所有非GET请求
    * 当query fial 有值的时候认为请求设置为失败状态
@@ -16,5 +16,8 @@ module.exports = {
       body: body
     })
   },
-  queryMap: [['_page', 'page'], ['_limit', 'len']]
+  queryMap: [
+    ['_page', 'page'],
+    ['_limit', 'len']
+  ]
 }
