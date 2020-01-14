@@ -7,7 +7,13 @@ const users = () => {
   return users
 }
 module.exports = {
-  users: users()
+  users: users(),
+  'list[get]': [
+    { id: 0, name: 'book1' },
+    { id: 1, name: 'book2' },
+    { id: 2, name: 'book3' }
+  ],
+  'upload[file]': { code: 200, message: 'succeed', data: true }
 }
 // /test/users?id=0
 // /test/users?name=user1

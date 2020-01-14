@@ -33,7 +33,8 @@ const argv = yargs
     },
     static: {
       type: 'string',
-      description: 'Set static files directory(same as json-server)',
+      description:
+        'Set static files directory(same as json-server) TODO正在思考是否有必要',
       default: 'public'
     },
     watch: {
@@ -46,7 +47,7 @@ const argv = yargs
       alias: 'o',
       type: 'boolean',
       description: 'open',
-      default: false
+      default: true
     },
     middlewares: {
       alias: 'm',
@@ -55,12 +56,16 @@ const argv = yargs
     }
   })
   .command(
-    '$0 [root]',
-    'jsr [root]',
+    '$0 <root>',
+    `example:
+    jsr .
+    jsr books.json
+    jsr index.js
+    `,
     yargs => {
       yargs.positional('root', {
         type: 'string',
-        default: '.',
+        // default: '.',
         describe: 'Paths to mock files dir or file '
       })
     },
@@ -70,8 +75,8 @@ const argv = yargs
       run(argv)
     }
   )
-  .example('$0 mock')
-  .example('$0 mock --port 3000')
+  // .example('$0 mock')
+  // .example('$0 mock --port 3000')
   .help('help')
   .alias('help', 'h')
   .version(pkg.version)

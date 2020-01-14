@@ -1,9 +1,46 @@
 # json-server-router
 
-[json-server-router](https://github.com/advence-liz/json-server-router)  
+[json-server-router](https://github.com/advence-liz/json-server-router)简约但强大的 mock server
+
+
+- [json-server-router](#json-server-router)
+  - [getting-started](#getting-started)
+  - [路由规则](#%e8%b7%af%e7%94%b1%e8%a7%84%e5%88%99)
+    - [路由生成规则示意](#%e8%b7%af%e7%94%b1%e7%94%9f%e6%88%90%e8%a7%84%e5%88%99%e7%a4%ba%e6%84%8f)
+  - [命令参数](#%e5%91%bd%e4%bb%a4%e5%8f%82%e6%95%b0)
+    - [参数说明](#%e5%8f%82%e6%95%b0%e8%af%b4%e6%98%8e)
+    - [`jsr.config.js` simple](#jsrconfigjs-simple)
+  - [功能介绍](#%e5%8a%9f%e8%83%bd%e4%bb%8b%e7%bb%8d)
+  - [GET](#get)
+    - [Filter](#filter)
+    - [Paginate](#paginate)
+    - [Sort](#sort)
+    - [Slice](#slice)
+    - [Operators](#operators)
+    - [Full-text search](#full-text-search)
+    - [Relationships](#relationships)
+  - [POST PUT DELETE](#post-put-delete)
+  - [自定义非GET请求返回值](#%e8%87%aa%e5%ae%9a%e4%b9%89%e9%9d%9eget%e8%af%b7%e6%b1%82%e8%bf%94%e5%9b%9e%e5%80%bc)
+    - [使非GET请求跟GET请求行为一致](#%e4%bd%bf%e9%9d%9eget%e8%af%b7%e6%b1%82%e8%b7%9fget%e8%af%b7%e6%b1%82%e8%a1%8c%e4%b8%ba%e4%b8%80%e8%87%b4)
+  - [文件上传](#%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0)
+  - [生成随机数据](#%e7%94%9f%e6%88%90%e9%9a%8f%e6%9c%ba%e6%95%b0%e6%8d%ae)
+  - [战斗人员可以作为`json-server`中间件引用](#%e6%88%98%e6%96%97%e4%ba%ba%e5%91%98%e5%8f%af%e4%bb%a5%e4%bd%9c%e4%b8%bajson-server%e4%b8%ad%e9%97%b4%e4%bb%b6%e5%bc%95%e7%94%a8)
+  - [演示](#%e6%bc%94%e7%a4%ba)
+
+  
+
+## getting-started
+
+install json-server-router
+
+```bash
+$ npm install json-server-router -g
+```
+
+假设有文件`books.json`内容如下：
 
 ```json
-
+// books.json
 {
   "update": { "code": 200, "message": "succeed", "data": true },
   "retrieve": { "code": 200, "message": "succeed", "data": true },
@@ -11,14 +48,28 @@
   "delete": { "code": 200, "message": "succeed", "data": true }
 }
 ```
+运行命令`$ jsr books.json`,将以`books.json`为数据源启动 mock server，
+对应生成四个接口 `/books/update` `/books/retrieve` `/books/create` `/books/delete`，其中文件中每个键值成为一个接口。
 
-## json-server-router 使用方式
+运行`$ curl http://localhost:3000/books/update`
 
-json-server-router 的实现理念是根据目录结构，构建出想要的接口形式
-假设我们的目标接口为 `/aaa/bbb/ccc/update`
-那么我们只需构件出如下的目录结构
+返回
+```js
+{
+  "code": 200,
+  "message": "succeed",
+  "data": true
+}
+```
 
-当遇到名称为 `index` 的文件路径拼接的时候会忽略`index`，当遇见键值为 `index`路径拼接同样也会忽略`index`
+
+## 路由规则
+
+如果想构建复杂的路由结构该怎么办？json-server-router 提供一个便捷的方式创建复杂路由，你只需按照一定的规则构建出对应的目录结构就好。
+
+假设我们的目标接口为 `/aaa/bbb/ccc/update`，那么我们只需构造出如下的目录结构
+
+> tips当遇到名称为 `index` 的文件路径拼接的时候会忽略`index`，当遇见键值为 `index`路径拼接同样也会忽略`index`
 
 ```bash
 - aaa
@@ -33,10 +84,11 @@ or
 
 ```
 
-## 路由生成示意大概下面这个样子,`mock`为 mock 文件的根目录
+运行`$ jsr aaa`就会得到目标接口；
+
+### 路由生成规则示意
 
 ```bash
-mock/books/index.json
 -mock
  + index.json    ------>   /xxx
  + book.json     ------>   /book/xxx
@@ -45,59 +97,39 @@ mock/books/index.json
    + bar.json    ------>  /foo/bar/xxx
 ```
 
-## 假设`/books/index.json`内容如下  
-
-将对应生成四个接口 `/books/` `/books/retrieve` `/books/create` `/books/delete`
-
-```json
-{
-  "index": { "code": 200, "message": "succeed", "data": true }, // /books/
-  "retrieve": { "code": 200, "message": "succeed", "data": true },// /books/retrieve
-  "create": { "code": 200, "message": "succeed", "data": true },// /books/create
-  "delete": { "code": 200, "message": "succeed", "data": true }// /books/delete
-}
-```
-
-## 安装&使用
-
-当前全局安装之后你会得到一个叫`jsr`的全局命令,根据前面的介绍这时候其实你只需构件出一个包含`mock files` 的根目录就足够了
-
-```bash
-$ npm install json-server-router -g
-$ jsr  mock
-```
 
 ## 命令参数
 
 ```bash
-jsr [options]
-
-Options Required:
-  --root, -r  Paths to mock files parent dir          [string] [required]
-
-Options:
-  --config           Path to JSON config file  [string] [default:jsr.config.js]
-  --port, -p         Set port                    [number] [default: 3000]
-  --host                                [string] [default: "local ip"]
-  --static           Set static files directory(same as json-server) [string] [default: "public"]
-  --watch, -w        Watch file(s)             [boolean] [default: false]
-  --open, -o         open                      [boolean] [default: false]
-  --middlewares, -m  Paths to middleware files TODO               [array]
-  --help, -h         Show help                                  [boolean]
-  --version, -v      Show version number                        [boolean]
+jsr <root> [options]
 
 Examples:
-  jsr --root mock
-  jsr --root mock --port 3000
+jsr .
+jsr mock
+jsr books.json
+jsr index.js
+
+
+位置：
+  root  Paths to mock files dir or file            [字符串]
+
+选项：
+  --config           Path to config file [string] [default:
+                     jsr.config.js]
+  --port, -p         Set port         [数字] [默认值: 3000]
+  --host                 [字符串] [默认值: 本机IP]
+  --watch, -w        Watch file(s)    [布尔] [默认值: true]
+  --open, -o         open            [布尔] [默认值: false]
+  --help, -h         显示帮助信息                    [布尔]
+  --version, -v      显示版本号                      [布尔]
 ```  
 
 ### 参数说明
 
 - `config` 设置配置文件默认配置文件的地址是当前目录的下的`jsr.config.js`
-- `static` 静态资源的地址跟`json-server`是一致的，需要注意的是如果 `static`路径存在的话`json-server-router`会自动创建一个包含所有路由的`index.html`，如果`static`目录不存在，不会自动创建目录生成`index.html`
 - `watch` 监控文件变化自动重新加载
 
-## `jsr.config.js` simple
+### `jsr.config.js` simple
 
 ```js
 module.exports = {
@@ -106,11 +138,118 @@ module.exports = {
 }
 ```
 
+## 功能介绍
+
 ## GET
 
-`json-server-router`其底层依赖[json-server](https://github.com/typicode/json-server)所构建，所以在不出意外的情况下同时也拥有`json-server`的所有`GET`请求相关功能
+`json-server-router`其底层依赖[json-server](https://github.com/typicode/json-server)所构建，所以在不出意外的情况下同时也拥有`json-server`的所有`GET`请求相关功能;
 
-当使用`json-server` 我们可以通过构建路由`/get/users?_page=7&_limit=10`进行分页查询但是`query`的关键词必须是指定的
+> `json-server-router`是对`json-server`的扩展所以要想更好的理解下面的内容最好要先了解[json-server](https://github.com/typicode/json-server)
+
+
+### Filter
+
+Use `.` to access deep properties
+
+```
+GET /posts?title=json-server&author=typicode
+GET /posts?id=1&id=2
+GET /comments?author.name=typicode
+```
+
+### Paginate
+
+Use `_page` and optionally `_limit` to paginate returned data.
+
+In the `Link` header you'll get `first`, `prev`, `next` and `last` links.
+
+
+```
+GET /posts?_page=7
+GET /posts?_page=7&_limit=20
+```
+
+_10 items are returned by default_
+
+### Sort
+
+Add `_sort` and `_order` (ascending order by default)
+
+```
+GET /posts?_sort=views&_order=asc
+GET /posts/1/comments?_sort=votes&_order=asc
+```
+
+For multiple fields, use the following format:
+
+```
+GET /posts?_sort=user,views&_order=desc,asc
+```
+
+### Slice
+
+Add `_start` and `_end` or `_limit` (an `X-Total-Count` header is included in the response)
+
+```
+GET /posts?_start=20&_end=30
+GET /posts/1/comments?_start=20&_end=30
+GET /posts/1/comments?_start=20&_limit=10
+```
+
+_Works exactly as [Array.slice](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/slice) (i.e. `_start` is inclusive and `_end` exclusive)_
+
+### Operators
+
+Add `_gte` or `_lte` for getting a range
+
+```
+GET /posts?views_gte=10&views_lte=20
+```
+
+Add `_ne` to exclude a value
+
+```
+GET /posts?id_ne=1
+```
+
+Add `_like` to filter (RegExp supported)
+
+```
+GET /posts?title_like=server
+```
+
+### Full-text search
+
+Add `q`
+
+```
+GET /posts?q=internet
+```
+
+### Relationships
+
+To include children resources, add `_embed`
+
+```
+GET /posts?_embed=comments
+GET /posts/1?_embed=comments
+```
+
+To include parent resource, add `_expand`
+
+```
+GET /comments?_expand=post
+GET /comments/1?_expand=post
+```
+
+To get or create nested resources (by default one level, [add custom routes](#add-custom-routes) for more)
+
+```
+GET  /posts/1/comments
+POST /posts/1/comments
+```
+
+当使用`json-server` 我们可以通过构建路由`/get/users?_page=7&_limit=10`进行分页查询但是`query`的关键词必须是指定的,
 在`json-server-router`中可以再`jsr.config.js`中自定义`queryMap`字段来修改关键词的名字，配置好了之后就可以通过`/get/users?page=7&len=10`进行分页查询
 
 ```js
@@ -125,7 +264,7 @@ module.exports = {
 
 关于非`GET`请求你不需要定义`mock files`，`json-server-router`对所有非`GET`请求进行统一处理不管其路由是什么一致通过handler函数处理
 
-### 返回结果如下
+返回结果如下
 
 ```js
 {
@@ -137,7 +276,9 @@ module.exports = {
 }
 ```
 
-### 你可以通过重写`jsr.config.js`中的handler 函数自定义其处理结果
+## 自定义非GET请求返回值
+
+你可以通过重写`jsr.config.js`中的handler 函数自定义其处理结果
 
 ```js
 //jsr.config.js
@@ -161,11 +302,10 @@ module.exports = {
  }
 ```
 
-## jsr魔法注释
+### 使非GET请求跟GET请求行为一致
 
-### 有的时候你可以能需要非GET请求得到跟GET请求一样的行为
-
-为了完成将非GET请求跟GET一致的行为,对 mock 数据添加了配置 `"list[get]"`生成的路由不会包含`[get]` 当用POST 访问 `/xxxx/list`时就会得到mock文件中定义的数据
+有的时候你可以能需要非GET请求得到跟GET请求一样的行为,此功能可以通过对 mock 数据添加魔法注释实现，
+ `"list[get]"`生成的路由不会包含`[get]` 当用POST 访问 `/xxxx/list`时就会得到mock文件中定义的数据
 
 ```json
 {
@@ -176,9 +316,9 @@ module.exports = {
   ]
 }
 ```
-### 文件上传功能
+## 文件上传
 
-jsr支持文件上传功能只要添加file注释即可`"upload[file]"`,目前上传文件对应的`name`固定为`file`
+jsr支持文件上传功能只要添加file魔法注释即可`"upload[file]"`,目前上传文件对应的`name`固定为`file`
 
 ```json
 {
@@ -209,11 +349,27 @@ jsr支持文件上传功能只要添加file注释即可`"upload[file]"`,目前�
 
 `$ http -f  xxxx/upload file@somefile.xx`
 
-## tips
+## 生成随机数据
 
-- 当`jsr`运行起来之后在命令窗口键入`rs`会重新加载
-  
-- 当`static`路径存在的时候，路由`/jsr` 会返回所有路由信息，当`static`路径不存在的时候路由`/`会返回所有路由信息
+Using JS instead of a JSON file, you can create data programmatically.
+
+```javascript
+// index.js
+module.exports = () => {
+  const data = { users: [] }
+  // Create 1000 users
+  for (let i = 0; i < 1000; i++) {
+    data.users.push({ id: i, name: `user${i}` })
+  }
+  return data
+}
+```
+
+```bash
+$ jsr index.js
+```
+
+__Tip__ use modules like [Faker](https://github.com/Marak/faker.js), [Casual](https://github.com/boo1ean/casual), [Chance](https://github.com/victorquinn/chancejs) or [JSON Schema Faker](https://github.com/json-schema-faker/json-schema-faker).
 
 ## 战斗人员可以作为`json-server`中间件引用
 
@@ -250,17 +406,7 @@ server.listen(3000, () => {
 
 ## 演示
 
-fork 本仓储然后`$ npm i` `npm link` `jsr` 效果将如同下面所示：
-
 ![jsr](doc/jsr.gif)
 ![cli](doc/cli.png)
 ![e](doc/bro.png)
 
-> `json-server-router`是对`json-server`的扩展所以要想更好的理解下面的内容最好要先了解[json-server](https://github.com/typicode/json-server)
-
-
-## json-server-router 要解决的问题
-
-在使用 json-server 时你写了如下文件(db.json) 也就代表你得到了四个 mock 接口
-`/update` ,`/retrieve`, `/create` ,`/delete`
-但是实际的需求中接口路由肯定不能这么简单你需要的可能是 `/aaa/bbb/ccc/update`这样的形式,虽然`json-server`可以配置`rewrite`可以解决部分问题，但是这并不简单，接下来我们来看一下`json-server-router`的方式
