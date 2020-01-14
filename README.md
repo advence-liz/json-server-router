@@ -406,7 +406,4 @@ server.listen(3000, () => {
 
 ## 演示
 
-![jsr](doc/jsr.gif)
-![cli](doc/cli.png)
-![e](doc/bro.png)
-
+![](doc/jsr.gif)
