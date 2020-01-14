@@ -46,7 +46,16 @@ class JsonServerRouter {
   }
   _init () {
     let { root, publicPath, port, open, host } = this.opts
-
+    // jsr 扫描文件到 node_modules中，由于文件过多后续卡住了
+    if (this.routeSources.length > 300) {
+      console.log(
+        green('当前mcok根目录为'),
+        green(root),
+        red('文件数量过多,请选择正确的，mock跟目录!')
+      )
+      console.log(blue('更多用法: $ jsr -h'))
+      process.exit(0)
+    }
     this.routeSources.forEach(filePath => {
       const prefix = filePath
         .replace(/\.(js|json)$/, '')

@@ -56,7 +56,7 @@ const argv = yargs
   })
   .command(
     '$0 [root]',
-    'welcome',
+    'jsr [root]',
     yargs => {
       yargs.positional('root', {
         type: 'string',
@@ -70,8 +70,8 @@ const argv = yargs
       run(argv)
     }
   )
-  .example('$0 --root mock')
-  .example('$0 --root mock --port 3000')
+  .example('$0 mock')
+  .example('$0 mock --port 3000')
   .help('help')
   .alias('help', 'h')
   .version(pkg.version)

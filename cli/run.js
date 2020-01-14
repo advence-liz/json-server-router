@@ -29,6 +29,7 @@ module.exports = argv => {
         console.log(blue(`   ${event}       ${path} has changed reloading...`))
         console.log(green('          please waiting...'))
         console.log('')
+        console.count('createServer')
         server.closeServer()
         server = createServer(argv)
       })
