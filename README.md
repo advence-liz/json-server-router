@@ -1,6 +1,8 @@
 # json-server-router
 
-[json-server-router](https://github.com/advence-liz/json-server-router)简约但强大的 mock server
+[json-server-router](https://github.com/advence-liz/json-server-router)
+
+> 简约但强大的 mock server 构建命令行工具
 
 
 - [json-server-router](#json-server-router)
@@ -48,7 +50,9 @@ $ npm install json-server-router -g
   "delete": { "code": 200, "message": "succeed", "data": true }
 }
 ```
-运行命令`$ jsr books.json`,将以`books.json`为数据源启动 mock server，
+运行命令`$ jsr books.json`
+
+将以`books.json`为数据源启动 mock server，
 对应生成四个接口 `/books/update` `/books/retrieve` `/books/create` `/books/delete`，其中文件中每个键值成为一个接口。
 
 运行`$ curl http://localhost:3000/books/update`
