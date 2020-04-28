@@ -1,13 +1,13 @@
 module.exports = {
-  extends: 'standard',
+  extends: ['standard', 'prettier'],
   env: {
-    node: true
+    node: true,
   },
   rules: {
     indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'never'],
-    'no-unused-vars': 1
-  }
+    'no-unused-vars': 1,
+  },
 }
