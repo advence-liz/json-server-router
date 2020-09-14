@@ -69,10 +69,26 @@ const argv = yargs
         describe: 'Paths to mock files dir or file '
       })
     },
-    function (argv) {
+    argv => {
       // export DEBUG=jsr:*
       debug(argv)
       run(argv)
+    }
+  )
+  .command(
+    'route <route>',
+    `example:
+    jsr route /api/books/update
+    `,
+    yargs => {
+      yargs.positional('route', {
+        type: 'string',
+        // default: '.',
+        describe: 'targe route'
+      })
+    },
+    argv => {
+      require('./scripts/createRouter')(argv)
     }
   )
   // .example('$0 mock')
@@ -81,7 +97,7 @@ const argv = yargs
   .alias('help', 'h')
   .version(pkg.version)
   .alias('version', 'v')
-  .fail(function (msg, err, yargs) {
+  .fail((msg, err, yargs) => {
     if (err) throw err // preserve stack
     console.info(bgRed('You broke it!'))
     console.info(red(msg))
