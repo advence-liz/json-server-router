@@ -91,6 +91,10 @@ module.exports = function createServer (opts) {
       green('❤️  当修改mock文件之后'),
       blue('输入 rs 刷新 mock server')
     )
+    console.info(
+      green('❤️  了解更多'),
+      blue('https://github.com/advence-liz/json-server-router')
+    )
   })
   process.on('uncaughtException', error => {
     if (error.errno === 'EADDRINUSE') {

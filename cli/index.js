@@ -57,10 +57,13 @@ const argv = yargs
   })
   .command(
     '$0 <root>',
-    `example:
-    jsr .
-    jsr books.json
-    jsr index.js
+    `jsr [options]
+
+    命令：
+      jsr <root>         example:
+                         jsr .
+                         jsr books.json
+                         jsr index.js
     `,
     yargs => {
       yargs.positional('root', {
@@ -76,9 +79,11 @@ const argv = yargs
     }
   )
   .command(
-    'route <route>',
+    ['route <route>', 'ro', 'r'],
     `example:
     jsr route /api/books/update
+    jsr ro /api/books/update
+
     `,
     yargs => {
       yargs.positional('route', {
@@ -93,7 +98,7 @@ const argv = yargs
   )
   // .example('$0 mock')
   // .example('$0 mock --port 3000')
-  .help('help')
+  .help()
   .alias('help', 'h')
   .version(pkg.version)
   .alias('version', 'v')
