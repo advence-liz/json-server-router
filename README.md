@@ -399,6 +399,40 @@ $ jsr index.js
 
 **Tip** use modules like [Faker](https://github.com/Marak/faker.js), [Casual](https://github.com/boo1ean/casual), [Chance](https://github.com/victorquinn/chancejs) or [JSON Schema Faker](https://github.com/json-schema-faker/json-schema-faker).
 
+## 默认集成 mockjs
+
+为了更好的支持生成随机数据的需求现在默认集成mockjs
+
+举例说明：可以在 mock 文件中直接使用 mockjs 语法如下文例子所示
+
+```js
+// mockjs 例子
+module.exports = {
+  // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
+  'list|10': [
+    {
+      // 属性 id 是一个自增数，起始值为 1，每次增 1
+      'id|+1': 1,
+      // 随机中文名
+      name: '@cname',
+      // 随机地址
+      address: '@city(true)',
+      web: '@url',
+      guid: '@guid',
+      // 生成 200x 200 的图片
+      image: "@image('200x200')",
+      constellation: '@constellation',
+      // 三选一
+      'oneOf|1': ['one', 'two', 'three'],
+      // 生成满足正则条件的字符串
+      regexp1: /[a-z][A-Z][0-9]/,
+      regexp2: /\w\W\s\S\d\D/,
+      regexp3: /\d{5,10}/
+    }
+  ]
+}
+```
+
 ## 战斗人员可以作为`json-server`中间件引用
 
 可以参考`cli/server.js`
