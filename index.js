@@ -7,6 +7,7 @@ const fs = require('fs-extra')
 const express = require('express')
 const rewrite = require('express-urlrewrite')
 const opn = require('opn')
+const { mock } = require('mockjs')
 const parseName = require('./lib/parseName')
 
 /**
@@ -70,7 +71,7 @@ class JsonServerRouter {
        */
 
       delete require.cache[filePath]
-      const routes = require(filePath)
+      const routes = mock(require(filePath))
       /**
        * 遍历对象键值解析出路径中配置目前就支持get file
        */
