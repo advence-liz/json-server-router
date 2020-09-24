@@ -1,10 +1,37 @@
-# json-server-router
+# json-server-router 
+[![](https://travis-ci.org/typicode/json-server.svg?branch=master)](https://travis-ci.org/typicode/json-server) [![](https://badge.fury.io/js/json-server-router.svg)](http://badge.fury.io/js/json-server-router)
+
 
 [json-server-router](https://github.com/advence-liz/json-server-router)
 
 > 简约但强大的 mock server 构建命令行工具
 
 - [json-server-router](#json-server-router)
+  - [getting-started](#getting-started)
+  - [路由规则](#路由规则)
+    - [路由生成规则示意](#路由生成规则示意)
+    - [路由生成工具命令](#路由生成工具命令)
+  - [命令参数](#命令参数)
+    - [参数说明](#参数说明)
+    - [`jsr.config.js` simple](#jsrconfigjs-simple)
+  - [功能介绍](#功能介绍)
+  - [GET](#get)
+    - [Filter](#filter)
+    - [Paginate](#paginate)
+    - [Sort](#sort)
+    - [Slice](#slice)
+    - [Operators](#operators)
+    - [Full-text search](#full-text-search)
+    - [Relationships](#relationships)
+  - [POST PUT DELETE](#post-put-delete)
+  - [自定义非 GET 请求返回值](#自定义非-get-请求返回值)
+    - [使非 GET 请求跟 GET 请求行为一致](#使非-get-请求跟-get-请求行为一致)
+  - [文件上传](#文件上传)
+  - [生成随机数据](#生成随机数据)
+  - [默认集成 mockjs](#默认集成-mockjs)
+  - [战斗人员可以作为`json-server`中间件引用](#战斗人员可以作为json-server中间件引用)
+  - [Q&A](#qa)
+  - [演示](#演示)
 
   - [getting-started](#getting-started)
   - [路由规则](#%e8%b7%af%e7%94%b1%e8%a7%84%e5%88%99)
