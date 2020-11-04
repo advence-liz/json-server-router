@@ -151,7 +151,7 @@ module.exports = {
   }
 }
 ```
-lerna more: [josn-server coutom routes](https://github.com/typicode/json-server/#custom-routes-example) [express-urlrewrite](https://github.com/kapouer/express-urlrewrite#readme)
+learn more: [josn-server coutom routes](https://github.com/typicode/json-server/#custom-routes-example) [express-urlrewrite](https://github.com/kapouer/express-urlrewrite#readme)
 
 ## Command Parameter
 
