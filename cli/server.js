@@ -103,7 +103,13 @@ module.exports = function createServer (opts) {
           `Cannot bind to the port ${error.port}. Please specify another port number either through --port argument or through the jsr.config.js configuration file`
         )
       )
-    } else console.log('Some error occurred', error)
+    } else {
+      console.log(
+        '查询文档寻求帮助:',
+        blue('https://github.com/advence-liz/json-server-router')
+      )
+      console.log(red('Some error occurred'), error)
+    }
     process.exit(1)
   })
   // http://www.html-js.com/article/The-correct-method-of-HTTP-server-nodejs-scrap-off-in-nodejs
