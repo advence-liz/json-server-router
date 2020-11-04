@@ -1,46 +1,22 @@
-# json-server-router 
+# json-server-router
 [![](https://travis-ci.org/typicode/json-server.svg?branch=master)](https://travis-ci.org/typicode/json-server) [![](https://badge.fury.io/js/json-server-router.svg)](http://badge.fury.io/js/json-server-router)
 
+English | [简体中文](./README-zh_CN.md)
 
 [json-server-router](https://github.com/advence-liz/json-server-router)
 
-> 简约但强大的 mock server 构建命令行工具
+> Simple and Robust Mock Server For Creating Router Command Tools
 
 - [json-server-router](#json-server-router)
-  - [getting-started](#getting-started)
-  - [路由规则](#路由规则)
-    - [路由生成规则示意](#路由生成规则示意)
-    - [路由生成工具命令](#路由生成工具命令)
-  - [命令参数](#命令参数)
-    - [参数说明](#参数说明)
-    - [`jsr.config.js` simple](#jsrconfigjs-simple)
-  - [功能介绍](#功能介绍)
-  - [GET](#get)
-    - [Filter](#filter)
-    - [Paginate](#paginate)
-    - [Sort](#sort)
-    - [Slice](#slice)
-    - [Operators](#operators)
-    - [Full-text search](#full-text-search)
-    - [Relationships](#relationships)
-  - [POST PUT DELETE](#post-put-delete)
-  - [自定义非 GET 请求返回值](#自定义非-get-请求返回值)
-    - [使非 GET 请求跟 GET 请求行为一致](#使非-get-请求跟-get-请求行为一致)
-  - [文件上传](#文件上传)
-  - [生成随机数据](#生成随机数据)
-  - [默认集成 mockjs](#默认集成-mockjs)
-  - [战斗人员可以作为`json-server`中间件引用](#战斗人员可以作为json-server中间件引用)
-  - [Q&A](#qa)
-  - [演示](#演示)
 
   - [getting-started](#getting-started)
-  - [路由规则](#%e8%b7%af%e7%94%b1%e8%a7%84%e5%88%99)
-    - [路由生成规则示意](#%e8%b7%af%e7%94%b1%e7%94%9f%e6%88%90%e8%a7%84%e5%88%99%e7%a4%ba%e6%84%8f)
-    - [路由生成工具命令](#路由生成工具命令)
-  - [命令参数](#%e5%91%bd%e4%bb%a4%e5%8f%82%e6%95%b0)
-    - [参数说明](#%e5%8f%82%e6%95%b0%e8%af%b4%e6%98%8e)
+  - [Router Rules](#%e8%b7%af%e7%94%b1%e8%a7%84%e5%88%99)
+    - [Router generate rules show](#%e8%b7%af%e7%94%b1%e7%94%9f%e6%88%90%e8%a7%84%e5%88%99%e7%a4%ba%e6%84%8f)
+    - [Route generation tool commands](#Route generation tool commands)
+  - [Command Parameter](#%e5%91%bd%e4%bb%a4%e5%8f%82%e6%95%b0)
+    - [Parameter intruduciton](#%e5%8f%82%e6%95%b0%e8%af%b4%e6%98%8e)
     - [`jsr.config.js` simple](#jsrconfigjs-simple)
-  - [功能介绍](#%e5%8a%9f%e8%83%bd%e4%bb%8b%e7%bb%8d)
+  - [Function intruduction](#%e5%8a%9f%e8%83%bd%e4%bb%8b%e7%bb%8d)
   - [GET](#get)
     - [Filter](#filter)
     - [Paginate](#paginate)
@@ -50,12 +26,12 @@
     - [Full-text search](#full-text-search)
     - [Relationships](#relationships)
   - [POST PUT DELETE](#post-put-delete)
-  - [自定义非 GET 请求返回值](#%e8%87%aa%e5%ae%9a%e4%b9%89%e9%9d%9eget%e8%af%b7%e6%b1%82%e8%bf%94%e5%9b%9e%e5%80%bc)
-    - [使非 GET 请求跟 GET 请求行为一致](#%e4%bd%bf%e9%9d%9eget%e8%af%b7%e6%b1%82%e8%b7%9fget%e8%af%b7%e6%b1%82%e8%a1%8c%e4%b8%ba%e4%b8%80%e8%87%b4)
-  - [文件上传](#%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0)
-  - [生成随机数据](#%e7%94%9f%e6%88%90%e9%9a%8f%e6%9c%ba%e6%95%b0%e6%8d%ae)
-  - [战斗人员可以作为`json-server`中间件引用](#%e6%88%98%e6%96%97%e4%ba%ba%e5%91%98%e5%8f%af%e4%bb%a5%e4%bd%9c%e4%b8%bajson-server%e4%b8%ad%e9%97%b4%e4%bb%b6%e5%bc%95%e7%94%a8)
-  - [演示](#%e6%bc%94%e7%a4%ba)
+  - [Self-defined none GET request return value](#%e8%87%aa%e5%ae%9a%e4%b9%89%e9%9d%9eget%e8%af%b7%e6%b1%82%e8%bf%94%e5%9b%9e%e5%80%bc)
+    - [make none GET request same as GET request](#%e4%bd%bf%e9%9d%9eget%e8%af%b7%e6%b1%82%e8%b7%9fget%e8%af%b7%e6%b1%82%e8%a1%8c%e4%b8%ba%e4%b8%80%e8%87%b4)
+  - [File Upload](#%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0)
+  - [Generate Random Data](#%e7%94%9f%e6%88%90%e9%9a%8f%e6%9c%ba%e6%95%b0%e6%8d%ae)
+  - [The combatant can be referenced as' JSON-Server 'middleware](#%e6%88%98%e6%96%97%e4%ba%ba%e5%91%98%e5%8f%af%e4%bb%a5%e4%bd%9c%e4%b8%bajson-server%e4%b8%ad%e9%97%b4%e4%bb%b6%e5%bc%95%e7%94%a8)
+  - [Show](#%e6%bc%94%e7%a4%ba)
 
 ## getting-started
 
@@ -65,7 +41,7 @@ install json-server-router
 $ npm install json-server-router -g
 ```
 
-假设有文件`books.json`内容如下：
+Assume we have file named `books.json`, content shows below：
 
 ```json
 // books.json
@@ -77,14 +53,14 @@ $ npm install json-server-router -g
 }
 ```
 
-运行命令`$ jsr books.json`
+Run command`$ jsr books.json`
 
-将以`books.json`为数据源启动 mock server，
-对应生成四个接口 `/books/update` `/books/retrieve` `/books/create` `/books/delete`，其中文件中每个键值成为一个接口。
+Start up mock server using `books.json` as data resource，
+Generate four interface `/books/update` `/books/retrieve` `/books/create` `/books/delete`，each key value becomes an interface.
 
-运行`$ curl http://localhost:3000/books/update`
+Run `$ curl http://localhost:3000/books/update`
 
-返回
+Return
 
 ```js
 {
@@ -94,30 +70,30 @@ $ npm install json-server-router -g
 }
 ```
 
-## 路由规则
+## Router Rules
 
-如果想构建复杂的路由结构该怎么办？json-server-router 提供一个便捷的方式创建复杂路由，你只需按照一定的规则构建出对应的目录结构就好。
+What if you want to build a complex routing structure? Json-server-router provides a convenient way to create complex routes, 
+you just need to build the corresponding directory structure according to certain rules.
 
-假设我们的目标接口为 `/aaa/bbb/ccc/update`，那么我们只需构造出如下的目录结构
-
-> tips 当遇到名称为 `index` 的文件路径拼接的时候会忽略`index`，当遇见键值为 `index`路径拼接同样也会忽略`index`
+Assuming that our target interface is'/aaa/bbb/ccc/update ', we only need to construct the following directory structure
+> tips ignores' index 'when it encounters a file path splicing with the name' index ', it will be same as meeting key value ' index '.
 
 ```bash
 - aaa
   - bbb
-    + ccc.json   // 在ccc.json中添加 update
+    + ccc.json   // add update in ccc.json 
 or
 
 - aaa
   - bbb
     - ccc
-      +index.json // 在index.json中添加update
+      +index.json //  add update in index.json 
 
 ```
 
-运行`$ jsr aaa`就会得到目标接口；
+Run `$ jsr aaa`, then you will get target interface；
 
-### 路由生成规则示意
+### Routing generates rule diagrams
 
 ```bash
 -mock
@@ -128,18 +104,19 @@ or
    + bar.json    ------>  /foo/bar/xxx
 ```
 
-### 路由生成工具命令
+### Routing generates command tool
 
-为了解决复杂路由需要构建复杂目录结构的问题，现提供`$ jsr route <path>` 工具命令以便按照路由规则生成对应目录结构.
+In order to solve  complex directory structures, the '$JSR route <path>' tool command is provided to 
+generate the corresponding directory structures according to the routing rules.
 
 ```bash
 $ jsr route /aaa/bbb/ccc/update
-$ jsr ro /aaa/bbb/ccc/update # 简写
+$ jsr ro /aaa/bbb/ccc/update # simple type
 ```
 
-运行上述命令将自动生成目录结构`mock/aaa/bbb/ccc.json`
+Run the command will automatically generate directory structures`mock/aaa/bbb/ccc.json`
 
-并且`ccc.json`自动生成如下内容
+And `ccc.json`will auto-generate following content:
 
 ```json
 {
@@ -151,7 +128,7 @@ $ jsr ro /aaa/bbb/ccc/update # 简写
 }
 ```
 
-## 命令参数
+## Command Parameter
 
 ```bash
 jsr <root> [options]
@@ -163,24 +140,24 @@ jsr books.json
 jsr index.js
 
 
-位置：
-  root  Paths to mock files dir or file            [字符串]
+Location：
+  root  Paths to mock files dir or file            [String]
 
-选项：
+Choose：
   --config           Path to config file [string] [default:
                      jsr.config.js]
-  --port, -p         Set port         [数字] [默认值: 3000]
-  --host                 [字符串] [默认值: 本机IP]
-  --watch, -w        Watch file(s)    [布尔] [默认值: true]
-  --open, -o         open            [布尔] [默认值: false]
-  --help, -h         显示帮助信息                    [布尔]
-  --version, -v      显示版本号                      [布尔]
+  --port, -p         Set port         [number] [default: 3000]
+  --host                 [String] [default: client IP]
+  --watch, -w        Watch file(s)    [Boolean] [default: true]
+  --open, -o         open            [Boolean] [default: false]
+  --help, -h         show help information         [Boolean]
+  --version, -v      show version                  [Boolean]
 ```
 
-### 参数说明
+### Parameter intruduction
 
-- `config` 设置配置文件默认配置文件的地址是当前目录的下的`jsr.config.js`
-- `watch` 监控文件变化自动重新加载
+- `config` Setting default configuration file is in current location named `jsr.config.js`
+- `watch` Monitor file changes automatically reload
 
 ### `jsr.config.js` simple
 
@@ -191,13 +168,15 @@ module.exports = {
 }
 ```
 
-## 功能介绍
+## Function Intruduction
 
 ## GET
 
-`json-server-router`其底层依赖[json-server](https://github.com/typicode/json-server)所构建，所以在不出意外的情况下同时也拥有`json-server`的所有`GET`请求相关功能;
+`json-server-router`Its underlying dependency [json-server](https://github.com/typicode/json-server) created，
+Therefore, it also has all 'GET' request-related functions of 'JSON-Server' without any accidents.
 
-> `json-server-router`是对`json-server`的扩展所以要想更好的理解下面的内容最好要先了解[json-server](https://github.com/typicode/json-server)
+> `json-server-router`is the extension for`json-server`
+So if you want to understand better you need to understand this json-server](https://github.com/typicode/json-server)
 
 ### Filter
 
@@ -299,9 +278,9 @@ To get or create nested resources (by default one level, [add custom routes](#ad
 GET  /posts/1/comments
 POST /posts/1/comments
 ```
-
-当使用`json-server` 我们可以通过构建路由`/get/users?_page=7&_limit=10`进行分页查询但是`query`的关键词必须是指定的,
-在`json-server-router`中可以再`jsr.config.js`中自定义`queryMap`字段来修改关键词的名字，配置好了之后就可以通过`/get/users?page=7&len=10`进行分页查询
+When using 'JSON-Server' we can build the route '/get/users? _page=7&_limit=10 'to do paging but the keywords of' query 'must be specified,
+In `json-server-router`,you could self-defined `queryMap` to change the name of the keyword in `jsr.config.js`，
+Once configured, you can use '/get/users? Page =7&len=10 'for paging query.
 
 ```js
 //jsr.config.js
@@ -315,9 +294,10 @@ POST /posts/1/comments
 
 ## POST PUT DELETE
 
-关于非`GET`请求你不需要定义`mock files`，`json-server-router`对所有非`GET`请求进行统一处理不管其路由是什么一致通过 handler 函数处理
+For non-' GET 'requests you do not need to define' mock Files', 'JSON-Server-Router' handles all non-' GET 'requests uniformly
+regardless of their route through the handler function.
 
-返回结果如下
+Return result 
 
 ```js
 {
@@ -329,16 +309,16 @@ POST /posts/1/comments
 }
 ```
 
-## 自定义非 GET 请求返回值
+## Self-defined none GET request return value
 
-你可以通过重写`jsr.config.js`中的 handler 函数自定义其处理结果
+You can customize the result of the handler function in 'jsr.config.js' by overwriting it
 
 ```js
 //jsr.config.js
  {
  /**
-   * 处理所有非GET请求
-   * 当query fial 有值的时候认为请求设置为失败状态
+   * Deal with all none Get request
+   * Return fail when the query fial has value
    */
   handler (req, res, next) {
     const { ip, originalUrl, body } = req
@@ -355,10 +335,10 @@ POST /posts/1/comments
  }
 ```
 
-### 使非 GET 请求跟 GET 请求行为一致
+### make none GET request same as GET request
 
-有的时候你可以能需要非 GET 请求得到跟 GET 请求一样的行为,此功能可以通过对 mock 数据添加魔法注释实现，
-`"list[get]"`生成的路由不会包含`[get]` 当用 POST 访问 `/xxxx/list`时就会得到 mock 文件中定义的数据
+Sometimes you can require a non-GET request to GET the same behavior as a GET request. This can be done by adding magic comments to the mock data.
+The route generated by '"list[get]"' does not contain the data defined in the mock file when '[get]' is accessed by POST '/ XXXX /list'
 
 ```json
 {
@@ -370,9 +350,9 @@ POST /posts/1/comments
 }
 ```
 
-## 文件上传
+## File Upload
 
-jsr 支持文件上传功能只要添加 file 魔法注释即可`"upload[file]"`,目前上传文件对应的`name`固定为`file`
+jsr ' 'Upload [File]' 'Can be created simply by adding a magic comment of' file '. At present, the 'name' corresponding to the uploaded file is fixed as' file '
 
 ```json
 {
@@ -380,7 +360,7 @@ jsr 支持文件上传功能只要添加 file 魔法注释即可`"upload[file]"`
 }
 ```
 
-`/xxxx/upload`返回结果如下：
+`/xxxx/upload`Return result ：
 
 ```json
 {
@@ -400,11 +380,11 @@ jsr 支持文件上传功能只要添加 file 魔法注释即可`"upload[file]"`
 }
 ```
 
-推一手[httpie](https://httpie.org/)：使用 httpie 如下命令即可完成上传文件的功能：
+[httpie](https://httpie.org/)：Using httpie command can finish file upload function：
 
 `$ http -f xxxx/upload file@somefile.xx`
 
-## 生成随机数据
+## Generate Random data
 
 Using JS instead of a JSON file, you can create data programmatically.
 
@@ -426,32 +406,32 @@ $ jsr index.js
 
 **Tip** use modules like [Faker](https://github.com/Marak/faker.js), [Casual](https://github.com/boo1ean/casual), [Chance](https://github.com/victorquinn/chancejs) or [JSON Schema Faker](https://github.com/json-schema-faker/json-schema-faker).
 
-## 默认集成 mockjs
+## Default integrate with mockjs
 
-为了更好的支持生成随机数据的需求现在默认集成mockjs
+To better support the need to generate random data, MockJS is now integrated by default
 
-举例说明：可以在 mock 文件中直接使用 mockjs 语法如下文例子所示
+For example: You can use the MockJS syntax directly in a mock file,following example:
 
 ```js
-// mockjs 例子
+// mockjs example
 module.exports = {
-  // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
+  //  attribute list value is an array from 1 to 10 elements
   'list|10': [
     {
-      // 属性 id 是一个自增数，起始值为 1，每次增 1
+      //The attribute ID is a self-incrementing number that starts at 1 and increments by 1 each time
       'id|+1': 1,
-      // 随机中文名
+      // random chines name
       name: '@cname',
-      // 随机地址
+      // random address
       address: '@city(true)',
       web: '@url',
       guid: '@guid',
-      // 生成 200x 200 的图片
+      // generate 200x 200 image
       image: "@image('200x200')",
       constellation: '@constellation',
-      // 三选一
+      // choose one from three options
       'oneOf|1': ['one', 'two', 'three'],
-      // 生成满足正则条件的字符串
+      // Generate string meet the regex condition
       regexp1: /[a-z][A-Z][0-9]/,
       regexp2: /\w\W\s\S\d\D/,
       regexp3: /\d{5,10}/
@@ -460,9 +440,9 @@ module.exports = {
 }
 ```
 
-## 战斗人员可以作为`json-server`中间件引用
+## The combatant can be referenced as' JSON-Server 'middleware
 
-可以参考`cli/server.js`
+You can refere `cli/server.js`
 
 ```js
 const jsonServer = require('json-server')
@@ -471,10 +451,11 @@ const middlewares = jsonServer.defaults() // { static: 'public' }
 const JsonServerRouter = require('json-server-router')
 
 /**
- * @prop {string} root mock文件根目录默认为 'mock'
- * @prop {number} port 端口号跟json-server 一致 默认为 3000
- * @prop {string} publicPath 生成默认首页的地址，跟json-server 配置一致 默认'public',如果修改路径的话那么json-server 对应的配置也要改
- * @prop {bool} open 是否用浏览器打开 默认 true
+ * @prop {string} root the root directory for mock file is 'mock'
+ * @prop {number} port  teh same as json-server is 3000
+ * @prop {string} publicPath generate default main page address，has the same setting as json-server ,the default is 'public',
+ *                            if you change the path then the configuration of the JSON-Server should also be changed
+ * @prop {bool} open whether open using a browser default true
  */
 
 const router = new JsonServerRouter({
@@ -495,10 +476,10 @@ server.listen(3000, () => {
 
 ## Q&A
 
-如有疑问可直接加微信面基
+If you have questions, feel free to add my wechat
 
 ![](doc/id.jpeg)
 
-## 演示
+## Demo
 
 ![](doc/jsr.gif)
