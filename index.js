@@ -58,7 +58,11 @@ class JsonServerRouter {
       console.log(blue('更多用法: $ jsr -h'))
       process.exit(0)
     }
+    // win \json-server-router\example\mock 替换成 /json-server-router/example/mock 才成
+    if (os() === 'win') root = root.replace(/\\/g, '/')
+
     this.routeSources.forEach(filePath => {
+      console.log(filePath)
       const prefix = filePath
         .replace(/\.(js|json)$/, '')
         .replace(/\/index$/, '')
@@ -160,7 +164,6 @@ function PartRouter (routes, prefix) {
 }
 function PartTemplate (routes, prefix, filePath) {
   const arr = []
-  if (os() === 'win') prefix = prefix.replace(/\\/, '/')
   this.render = () => {
     arr.push(
       ` <h3 class="bg-primary">${prefix} <span class="glyphicon glyphicon-file" aria-hidden="true"></span> <span class="h6" >${filePath}</span></h3>`
