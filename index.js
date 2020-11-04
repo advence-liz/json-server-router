@@ -7,6 +7,7 @@ const fs = require('fs-extra')
 const express = require('express')
 const rewrite = require('express-urlrewrite')
 const opn = require('opn')
+const os = require('./lib/os')
 const { mock } = require('mockjs')
 const parseName = require('./lib/parseName')
 
@@ -47,12 +48,12 @@ class JsonServerRouter {
   }
   _init () {
     let { root, publicPath, port, open, host } = this.opts
-    // jsr 扫描文件到 node_modules中，由于文件过多后续卡住了
+    // 由于未能指定正确的 mock 目录，比如 jsr 扫描文件到 node_modules中，由于文件过多会导致卡死
     if (this.routeSources.length > 300) {
       console.log(
         green('当前mcok根目录为'),
         green(root),
-        red('文件数量过多,请选择正确的，mock跟目录!')
+        red('文件数量过多,请选择正确的，mock根目录!')
       )
       console.log(blue('更多用法: $ jsr -h'))
       process.exit(0)
@@ -128,7 +129,7 @@ class JsonServerRouter {
   }
   // 对所有的xxx/index.{js,json}添加处理让路由xxx/ rewrite 到 xxx/index
   rewrite () {
-    let { root } = this.opts
+    let { root, routes } = this.opts
     const router = express.Router()
     glob.sync(`${root}/**/index.{js,json}`).forEach(filePath => {
       let prefix = path.parse(filePath.replace(root, '')).dir
@@ -136,6 +137,12 @@ class JsonServerRouter {
       let prefixReg = new RegExp(`(${prefix}\\?[^?/]*)|(^${prefix}$)`)
       router.use(rewrite(prefixReg, `${prefix}/index`))
     })
+
+    if (routes) {
+      Object.keys(routes).forEach(key => {
+        router.use(rewrite(key, routes[key]))
+      })
+    }
 
     return router
   }
@@ -153,6 +160,7 @@ function PartRouter (routes, prefix) {
 }
 function PartTemplate (routes, prefix, filePath) {
   const arr = []
+  if (os() === 'win') prefix = prefix.replace(/\\/, '/')
   this.render = () => {
     arr.push(
       ` <h3 class="bg-primary">${prefix} <span class="glyphicon glyphicon-file" aria-hidden="true"></span> <span class="h6" >${filePath}</span></h3>`

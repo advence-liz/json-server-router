@@ -10,6 +10,7 @@
   - [路由规则](#路由规则)
     - [路由生成规则示意](#路由生成规则示意)
     - [路由生成工具命令](#路由生成工具命令)
+    - [自定义路由 (rewrite)](#自定义路由-rewrite)
   - [命令参数](#命令参数)
     - [参数说明](#参数说明)
     - [`jsr.config.js` simple](#jsrconfigjs-simple)
@@ -149,6 +150,29 @@ $ jsr ro /aaa/bbb/ccc/update # 简写
   }
 }
 ```
+### 自定义路由 (rewrite)
+
+在 jsr.config.js 中添加 routes 字段,注意每个 route 必须以 / 开头
+
+```js
+// jsr.config.js
+module.exports = {
+  /**
+   * /api/posts # → /posts
+   * /api/posts/1  # → /posts/1
+   * /posts/1/show # → /posts/1
+   * /posts/javascript # → /posts?category=javascript
+   * /articles?id=1 # → /posts/1
+   */
+  routes: {
+    '/api/*': '/$1',
+    '/:resource/:id/show': '/:resource/:id',
+    '/posts/:category': '/posts?category=:category',
+    '/articles\\?id=:id': '/posts/:id'
+  }
+}
+```
+了解更多: [josn-server coutom routes](https://github.com/typicode/json-server/#custom-routes-example) [express-urlrewrite](https://github.com/kapouer/express-urlrewrite#readme)
 
 ## 命令参数
 

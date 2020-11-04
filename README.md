@@ -12,7 +12,8 @@ English | [简体中文](./README-zh_CN.md)
   - [getting-started](#getting-started)
   - [Router Rules](#%e8%b7%af%e7%94%b1%e8%a7%84%e5%88%99)
     - [Router generate rules show](#%e8%b7%af%e7%94%b1%e7%94%9f%e6%88%90%e8%a7%84%e5%88%99%e7%a4%ba%e6%84%8f)
-    - [Route generation tool commands](#Route generation tool commands)
+    - [Route generation tool commands](#routing-generates-command-tool)
+    - [Add coustom-routes(rewrite)](#add-coustom-routes-rewrite)
   - [Command Parameter](#%e5%91%bd%e4%bb%a4%e5%8f%82%e6%95%b0)
     - [Parameter intruduciton](#%e5%8f%82%e6%95%b0%e8%af%b4%e6%98%8e)
     - [`jsr.config.js` simple](#jsrconfigjs-simple)
@@ -127,6 +128,30 @@ And `ccc.json`will auto-generate following content:
   }
 }
 ```
+
+### Add coustom routes (rewrite)
+
+Add routes in jsr.config.js,Pay attention to start every route with /
+
+```js
+// jsr.config.js
+module.exports = {
+  /**
+   * /api/posts # → /posts
+   * /api/posts/1  # → /posts/1
+   * /posts/1/show # → /posts/1
+   * /posts/javascript # → /posts?category=javascript
+   * /articles?id=1 # → /posts/1
+   */
+  routes: {
+    '/api/*': '/$1',
+    '/:resource/:id/show': '/:resource/:id',
+    '/posts/:category': '/posts?category=:category',
+    '/articles\\?id=:id': '/posts/:id'
+  }
+}
+```
+lerna more: [josn-server coutom routes](https://github.com/typicode/json-server/#custom-routes-example) [express-urlrewrite](https://github.com/kapouer/express-urlrewrite#readme)
 
 ## Command Parameter
 

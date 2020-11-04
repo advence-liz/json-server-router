@@ -22,5 +22,18 @@ module.exports = {
   queryMap: [
     ['_page', 'page'],
     ['_limit', 'len']
-  ]
+  ],
+  /**
+   * /api/posts # → /posts
+   * /api/posts/1  # → /posts/1
+   * /posts/1/show # → /posts/1
+   * /posts/javascript # → /posts?category=javascript
+   * /articles?id=1 # → /posts/1
+   */
+  routes: {
+    '/api/*': '/$1',
+    '/:resource/:id/show': '/:resource/:id',
+    '/posts/:category': '/posts?category=:category',
+    '/articles\\?id=:id': '/posts/:id'
+  }
 }

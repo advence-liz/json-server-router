@@ -93,7 +93,7 @@ const argv = yargs
       })
     },
     argv => {
-      require('./scripts/createRouter')(argv)
+      require('../lib/createRouter')(argv)
     }
   )
   // .example('$0 mock')
