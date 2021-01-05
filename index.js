@@ -73,8 +73,8 @@ class JsonServerRouter {
        *  const routes = require(path.resolve(filePath))
        *  上面的写法会走缓存，如果文件以及修改了变拿不到新值
        */
-
-      delete require.cache[filePath]
+      // path.resolve 会自动将window 下分割符\，转为 Unix 分隔符/,用以解决 window 下缓存未清除问题
+      delete require.cache[path.resolve(filePath)]
       const routes = mock(require(filePath))
       /**
        * 遍历对象键值解析出路径中配置目前就支持get file
