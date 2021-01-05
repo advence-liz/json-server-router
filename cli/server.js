@@ -2,6 +2,7 @@ const jsonServer = require('json-server')
 const path = require('path')
 const fs = require('fs')
 const { blue, red, green } = require('chalk')
+const opn = require('opn')
 const multer = require('multer')
 const createTemplate = require('../lib/createTemplate')
 
@@ -15,7 +16,7 @@ const JsonServerRouter = require('../index')
  * @param {boolean} opts.open 是否默认打开浏览器
  */
 
-module.exports = function createServer (opts) {
+module.exports = function createServer(opts, init) {
   const { root, host, port, open, static: publicPath, handler, queryMap } = opts
   const middlewares = jsonServer.defaults({
     bodyParser: true,
@@ -37,15 +38,15 @@ module.exports = function createServer (opts) {
   // 路由
   const jsrPrefix = fs.existsSync(publicPath) ? '/jsr' : '/'
 
-  app.get('/', function (req, res) {
+  app.get('/', function(req, res) {
     res.send(createTemplate(router.templateStore))
   })
 
-  app.get(jsrPrefix, function (req, res) {
+  app.get(jsrPrefix, function(req, res) {
     res.jsonp(router.routeStore)
   })
 
-  app.use(multiUpload, function (req, res, next) {
+  app.use(multiUpload, function(req, res, next) {
     const { originalUrl } = req
     if (router.fileUpload.includes(originalUrl)) {
       const { files } = req
@@ -53,7 +54,7 @@ module.exports = function createServer (opts) {
     }
     next()
   })
-  app.use(function (req, res, next) {
+  app.use(function(req, res, next) {
     const { originalUrl } = req
     // split防止url上有额外query影响匹配规则
     const urlWithoutQuery = originalUrl.split('?')[0]
@@ -67,7 +68,7 @@ module.exports = function createServer (opts) {
     next()
   })
 
-  app.use(function (req, res, next) {
+  app.use(function(req, res, next) {
     queryMap.forEach(([_key, key]) => {
       req.query[_key] = req.query[key]
     })
@@ -83,6 +84,7 @@ module.exports = function createServer (opts) {
   const server = app.listen(port, () => {
     console.info(green('❤️  visit '), blue(`http://localhost:${port}/`))
     console.info(green('❤️  visit '), blue(`http://${host}:${port}/`))
+    init && open && opn(`http://localhost:${port}/`)
     console.info(
       green('❤️  查查所有mock路由以及数据源'),
       blue(`http://${host}:${port}${jsrPrefix}`)
@@ -114,18 +116,18 @@ module.exports = function createServer (opts) {
   })
   // http://www.html-js.com/article/The-correct-method-of-HTTP-server-nodejs-scrap-off-in-nodejs
   const sockets = []
-  server.on('connection', function (socket) {
+  server.on('connection', function(socket) {
     sockets.push(socket)
-    socket.once('close', function () {
+    socket.once('close', function() {
       sockets.splice(sockets.indexOf(socket), 1)
     })
   })
 
   server.closeServer = () => {
-    sockets.forEach(function (socket) {
+    sockets.forEach(function(socket) {
       socket.destroy()
     })
-    server.close(function () {})
+    server.close(function() {})
   }
   return server
 }

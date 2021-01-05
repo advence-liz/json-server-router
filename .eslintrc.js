@@ -8,6 +8,7 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'never'],
-    'no-unused-vars': 1
+    'no-unused-vars': 1,
+    'space-before-function-paren': 0
   }
 }

@@ -6,7 +6,6 @@ const path = require('path')
 const fs = require('fs-extra')
 const express = require('express')
 const rewrite = require('express-urlrewrite')
-const opn = require('opn')
 const os = require('./lib/os')
 const { mock } = require('mockjs')
 const parseName = require('./lib/parseName')
@@ -21,7 +20,7 @@ const parseName = require('./lib/parseName')
  * open 默认打开浏览器 默认true
  */
 class JsonServerRouter {
-  constructor (opts = {}) {
+  constructor(opts = {}) {
     this.opts = opts
     this.opts.root = path.resolve(this.opts.root)
     debug(this.opts)
@@ -33,7 +32,7 @@ class JsonServerRouter {
     this.isFile = false
     this._init()
   }
-  get routeSources () {
+  get routeSources() {
     const { root } = this.opts
     let stat = null
     try {
@@ -46,7 +45,7 @@ class JsonServerRouter {
 
     return this.isFile ? [root] : glob.sync(`${root}/**/*.{js,json}`)
   }
-  _init () {
+  _init() {
     let { root, publicPath, port, open, host } = this.opts
     // 由于未能指定正确的 mock 目录，比如 jsr 扫描文件到 node_modules中，由于文件过多会导致卡死
     if (this.routeSources.length > 300) {
@@ -62,7 +61,7 @@ class JsonServerRouter {
     if (os() === 'win') root = root.replace(/\\/g, '/')
 
     this.routeSources.forEach(filePath => {
-      console.log(filePath)
+      // console.log(filePath)
       const prefix = filePath
         .replace(/\.(js|json)$/, '')
         .replace(/\/index$/, '')
@@ -100,17 +99,15 @@ class JsonServerRouter {
         new PartTemplate(routes, prefix, filePath).render()
       )
     })
-
-    open && opn(`http://localhost:${port}/`)
   }
   // 注册各个子路由
-  routes () {
+  routes() {
     return (req, res, next) => {
       const app = req.app
       if (this.$IsInit) {
         const compareRegex = /\//g
 
-        this.routeStore.sort(function (x, y) {
+        this.routeStore.sort(function(x, y) {
           const xlen =
             (x.prefix.match(compareRegex) &&
               x.prefix.match(compareRegex).length) ||
@@ -132,7 +129,7 @@ class JsonServerRouter {
     }
   }
   // 对所有的xxx/index.{js,json}添加处理让路由xxx/ rewrite 到 xxx/index
-  rewrite () {
+  rewrite() {
     let { root, routes } = this.opts
     const router = express.Router()
     glob.sync(`${root}/**/index.{js,json}`).forEach(filePath => {
@@ -157,12 +154,12 @@ class JsonServerRouter {
  * @param {object} routes  当前文件输出JavaScript object
  * @param {string} prefix  路由前缀
  */
-function PartRouter (routes, prefix) {
+function PartRouter(routes, prefix) {
   this.prefix = prefix
   this.routes = routes
   this.getRoutes = app => app.use(`${prefix}`, jsonServer.router(routes))
 }
-function PartTemplate (routes, prefix, filePath) {
+function PartTemplate(routes, prefix, filePath) {
   const arr = []
   this.render = () => {
     arr.push(

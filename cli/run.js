@@ -4,7 +4,7 @@ const path = require('path')
 const { blue, green } = require('chalk')
 
 module.exports = argv => {
-  let server = createServer(argv)
+  let server = createServer(argv, true)
   process.stdin.on('error', () => {
     console.log('  Error, can\'t read from stdin')
   })
@@ -31,7 +31,7 @@ module.exports = argv => {
         console.log('')
         console.count('createServer')
         server.closeServer()
-        server = createServer(argv)
+        server = createServer(argv, false)
       })
   }
 }
