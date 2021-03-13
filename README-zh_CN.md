@@ -15,7 +15,6 @@
     - [参数说明](#参数说明)
     - [`jsr.config.js` simple](#jsrconfigjs-simple)
   - [功能介绍](#功能介绍)
-  - [GET](#get)
     - [Filter](#filter)
     - [Paginate](#paginate)
     - [Sort](#sort)
@@ -23,9 +22,7 @@
     - [Operators](#operators)
     - [Full-text search](#full-text-search)
     - [Relationships](#relationships)
-  - [POST PUT DELETE](#post-put-delete)
-  - [自定义非 GET 请求返回值](#自定义非-get-请求返回值)
-    - [使非 GET 请求跟 GET 请求行为一致](#使非-get-请求跟-get-请求行为一致)
+  - [~~POST PUT DELETE~~ 目前全部跟 GET 一致](#post-put-delete-目前全部跟-get-一致)
   - [文件上传](#文件上传)
   - [生成随机数据](#生成随机数据)
   - [默认集成 mockjs](#默认集成-mockjs)
@@ -216,10 +213,6 @@ module.exports = {
 
 ## 功能介绍
 
-## GET
-
-`json-server-router`其底层依赖[json-server](https://github.com/typicode/json-server)所构建，所以在不出意外的情况下同时也拥有`json-server`的所有`GET`请求相关功能;
-
 > `json-server-router`是对`json-server`的扩展所以要想更好的理解下面的内容最好要先了解[json-server](https://github.com/typicode/json-server)
 
 ### Filter
@@ -336,62 +329,9 @@ POST /posts/1/comments
 }
 ```
 
-## POST PUT DELETE
+## ~~POST PUT DELETE~~ 目前全部跟 GET 一致
 
-关于非`GET`请求你不需要定义`mock files`，`json-server-router`对所有非`GET`请求进行统一处理不管其路由是什么一致通过 handler 函数处理
-
-返回结果如下
-
-```js
-{
-    "body": {},
-    "code": 200,
-    "ip": "::1",
-    "message": "succeed",
-    "url": "/books/"
-}
-```
-
-## 自定义非 GET 请求返回值
-
-你可以通过重写`jsr.config.js`中的 handler 函数自定义其处理结果
-
-```js
-//jsr.config.js
- {
- /**
-   * 处理所有非GET请求
-   * 当query fial 有值的时候认为请求设置为失败状态
-   */
-  handler (req, res, next) {
-    const { ip, originalUrl, body } = req
-    const isFail = !!req.query.fail
-    res.json({
-      code: isFail ? 500 : 200,
-      message: isFail ? 'failed' : 'succeed',
-      cookie: req.get('cookie'),
-      ip,
-      url: originalUrl,
-      body: body
-    })
-  }
- }
-```
-
-### 使非 GET 请求跟 GET 请求行为一致
-
-有的时候你可以能需要非 GET 请求得到跟 GET 请求一样的行为,此功能可以通过对 mock 数据添加魔法注释实现，
-`"list[get]"`生成的路由不会包含`[get]` 当用 POST 访问 `/xxxx/list`时就会得到 mock 文件中定义的数据
-
-```json
-{
-  "list[get]": [
-    { "id": 0, "name": "book1" },
-    { "id": 1, "name": "book2" },
-    { "id": 2, "name": "book3" }
-  ]
-}
-```
+~~关于非`GET`请求你不需要定义`mock files`，`json-server-router`对所有非`GET`请求进行统一处理不管其路由是什么一致通过 handler 函数处理~~
 
 ## 文件上传
 

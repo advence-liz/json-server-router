@@ -195,11 +195,6 @@ module.exports = {
 
 ## Function Intruduction
 
-## GET
-
-`json-server-router`Its underlying dependency [json-server](https://github.com/typicode/json-server) created，
-Therefore, it also has all 'GET' request-related functions of 'JSON-Server' without any accidents.
-
 > `json-server-router`is the extension for`json-server`
 So if you want to understand better you need to understand this json-server](https://github.com/typicode/json-server)
 
@@ -317,22 +312,9 @@ Once configured, you can use '/get/users? Page =7&len=10 'for paging query.
 }
 ```
 
-## POST PUT DELETE
+## ~~POST PUT DELETE~~ NOW ALL SAME AS GET
 
-For non-' GET 'requests you do not need to define' mock Files', 'JSON-Server-Router' handles all non-' GET 'requests uniformly
-regardless of their route through the handler function.
-
-Return result 
-
-```js
-{
-    "body": {},
-    "code": 200,
-    "ip": "::1",
-    "message": "succeed",
-    "url": "/books/"
-}
-```
+~~For non-' GET 'requests you do not need to define' mock Files', 'JSON-Server-Router' handles all non-' GET 'requests uniformly~~
 
 ## Self-defined none GET request return value
 

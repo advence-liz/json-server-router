@@ -55,15 +55,16 @@ module.exports = function createServer(opts, init) {
     next()
   })
   app.use(function(req, res, next) {
-    const { originalUrl } = req
+    // const { originalUrl } = req
     // split防止url上有额外query影响匹配规则
-    const urlWithoutQuery = originalUrl.split('?')[0]
-    if (router.forceGet.includes(urlWithoutQuery)) {
-      // Converts POST to GET and move payload to query params
-      // This way it will make JSON Server that it's GET request
-      req.method = 'GET'
-      req.query = req.body
-    }
+    // const urlWithoutQuery = originalUrl.split('?')[0]
+    // if (router.forceGet.includes(urlWithoutQuery)) {
+    // Converts POST to GET and move payload to query params
+    // This way it will make JSON Server that it's GET request
+    // 全部请求转换为 get 处理
+    req.method = 'GET'
+    req.query = req.body
+    // }
     // Continue to JSON Server router
     next()
   })
