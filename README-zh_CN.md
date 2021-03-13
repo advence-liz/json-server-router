@@ -458,9 +458,7 @@ server.listen(3000, () => {
 
 ## Q&A
 
-如有疑问可直接加微信面基
-
-![](doc/id.jpeg)
+如有疑问可直接加微信面基 `advence-liz`
 
 ## 演示
 

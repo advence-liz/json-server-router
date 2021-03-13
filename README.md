@@ -483,9 +483,8 @@ server.listen(3000, () => {
 
 ## Q&A
 
-If you have questions, feel free to add my wechat
+If you have questions, add my wechat `advence-liz`
 
-![](doc/id.jpeg)
 
 ## Demo
 
