@@ -1,13 +1,13 @@
 {
   "name": "json-server-router",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "json-server-router middleware of json-server for building mock interface more effective",
   "main": "index.js",
   "scripts": {
     "dev": "cd example && npm run dev"
   },
   "bin": {
-    "jsr": "./cli/index.js"
+    "jsr": "cli/index.js"
   },
   "author": "advence-liz",
   "license": "MIT",
