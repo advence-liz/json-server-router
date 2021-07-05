@@ -8,14 +8,14 @@
 > 简约但强大的 mock server 构建命令行工具
 
 - [json-server-router](#json-server-router)
-  - [getting-started](#getting-started)
+  - [开始](#开始)
+  - [命令参数](#命令参数)
+    - [参数说明](#参数说明)
+    - [`jsr.config.js` simple](#jsrconfigjs-simple)
   - [路由规则](#路由规则)
     - [路由生成规则示意](#路由生成规则示意)
     - [路由生成工具命令](#路由生成工具命令)
     - [自定义路由 (rewrite)](#自定义路由-rewrite)
-  - [命令参数](#命令参数)
-    - [参数说明](#参数说明)
-    - [`jsr.config.js` simple](#jsrconfigjs-simple)
   - [功能介绍](#功能介绍)
     - [Filter](#filter)
     - [Paginate](#paginate)
@@ -32,38 +32,14 @@
   - [Q&A](#qa)
   - [演示](#演示)
 
-  - [getting-started](#getting-started)
-  - [路由规则](#%e8%b7%af%e7%94%b1%e8%a7%84%e5%88%99)
-    - [路由生成规则示意](#%e8%b7%af%e7%94%b1%e7%94%9f%e6%88%90%e8%a7%84%e5%88%99%e7%a4%ba%e6%84%8f)
-    - [路由生成工具命令](#路由生成工具命令)
-  - [命令参数](#%e5%91%bd%e4%bb%a4%e5%8f%82%e6%95%b0)
-    - [参数说明](#%e5%8f%82%e6%95%b0%e8%af%b4%e6%98%8e)
-    - [`jsr.config.js` simple](#jsrconfigjs-simple)
-  - [功能介绍](#%e5%8a%9f%e8%83%bd%e4%bb%8b%e7%bb%8d)
-  - [GET](#get)
-    - [Filter](#filter)
-    - [Paginate](#paginate)
-    - [Sort](#sort)
-    - [Slice](#slice)
-    - [Operators](#operators)
-    - [Full-text search](#full-text-search)
-    - [Relationships](#relationships)
-  - [POST PUT DELETE](#post-put-delete)
-  - [自定义非 GET 请求返回值](#%e8%87%aa%e5%ae%9a%e4%b9%89%e9%9d%9eget%e8%af%b7%e6%b1%82%e8%bf%94%e5%9b%9e%e5%80%bc)
-    - [使非 GET 请求跟 GET 请求行为一致](#%e4%bd%bf%e9%9d%9eget%e8%af%b7%e6%b1%82%e8%b7%9fget%e8%af%b7%e6%b1%82%e8%a1%8c%e4%b8%ba%e4%b8%80%e8%87%b4)
-  - [文件上传](#%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0)
-  - [生成随机数据](#%e7%94%9f%e6%88%90%e9%9a%8f%e6%9c%ba%e6%95%b0%e6%8d%ae)
-  - [战斗人员可以作为`json-server`中间件引用](#%e6%88%98%e6%96%97%e4%ba%ba%e5%91%98%e5%8f%af%e4%bb%a5%e4%bd%9c%e4%b8%bajson-server%e4%b8%ad%e9%97%b4%e4%bb%b6%e5%bc%95%e7%94%a8)
-  - [演示](#%e6%bc%94%e7%a4%ba)
-
-## getting-started
+## 开始
 
 install json-server-router
 
 ```bash
 $ npm install json-server-router -g
 ```
-
+目前 mock 文件支持 `.json` `.jsonc` `.js` 三种格式。
 假设有文件`books.json`内容如下：
 
 ```json
@@ -93,6 +69,46 @@ $ npm install json-server-router -g
 }
 ```
 
+## 命令参数
+
+```bash
+jsr <root> [options]
+
+Examples:
+jsr .
+jsr mock
+jsr books.json
+jsr books.jsonc
+jsr index.js
+
+
+位置：
+  root  Paths to mock files dir or file 支持 .json .jsonc .js 三种格式文件           [字符串]
+
+选项：
+  --config           Path to config file [string] [default:
+                     jsr.config.js]
+  --port, -p         Set port         [数字] [默认值: 3000]
+  --host                 [字符串] [默认值: 本机IP]
+  --watch, -w        Watch file(s)    [布尔] [默认值: true]
+  --open, -o         open            [布尔] [默认值: false]
+  --help, -h         显示帮助信息                    [布尔]
+  --version, -v      显示版本号                      [布尔]
+```
+
+### 参数说明
+
+- `config` 设置配置文件默认配置文件的地址是当前目录的下的`jsr.config.js`
+- `watch` 监控文件变化自动重新加载
+
+### `jsr.config.js` simple
+
+```js
+module.exports = {
+  root: 'mock',
+  port: 3000
+}
+```
 ## 路由规则
 
 如果想构建复杂的路由结构该怎么办？json-server-router 提供一个便捷的方式创建复杂路由，你只需按照一定的规则构建出对应的目录结构就好。
@@ -115,7 +131,6 @@ or
 ```
 
 运行`$ jsr aaa`就会得到目标接口；
-
 ### 路由生成规则示意
 
 ```bash
@@ -173,46 +188,7 @@ module.exports = {
 ```
 了解更多: [josn-server coutom routes](https://github.com/typicode/json-server/#custom-routes-example) [express-urlrewrite](https://github.com/kapouer/express-urlrewrite#readme)
 
-## 命令参数
 
-```bash
-jsr <root> [options]
-
-Examples:
-jsr .
-jsr mock
-jsr books.json
-jsr books.jsonc
-jsr index.js
-
-
-位置：
-  root  Paths to mock files dir or file 支持 .json .jsonc .js 三种格式文件           [字符串]
-
-选项：
-  --config           Path to config file [string] [default:
-                     jsr.config.js]
-  --port, -p         Set port         [数字] [默认值: 3000]
-  --host                 [字符串] [默认值: 本机IP]
-  --watch, -w        Watch file(s)    [布尔] [默认值: true]
-  --open, -o         open            [布尔] [默认值: false]
-  --help, -h         显示帮助信息                    [布尔]
-  --version, -v      显示版本号                      [布尔]
-```
-
-### 参数说明
-
-- `config` 设置配置文件默认配置文件的地址是当前目录的下的`jsr.config.js`
-- `watch` 监控文件变化自动重新加载
-
-### `jsr.config.js` simple
-
-```js
-module.exports = {
-  root: 'mock',
-  port: 3000
-}
-```
 
 ## 功能介绍
 
