@@ -8,6 +8,7 @@ const express = require('express')
 const rewrite = require('express-urlrewrite')
 const os = require('./lib/os')
 const { mock } = require('mockjs')
+const { parse } = require('comment-json')
 const parseName = require('./lib/parseName')
 
 /**
@@ -43,7 +44,7 @@ class JsonServerRouter {
       process.exit(0)
     }
 
-    return this.isFile ? [root] : glob.sync(`${root}/**/*.{js,json}`)
+    return this.isFile ? [root] : glob.sync(`${root}/**/*.{js,json,jsonc}`)
   }
   _init() {
     let { root, publicPath, port, open, host } = this.opts
@@ -63,7 +64,7 @@ class JsonServerRouter {
     this.routeSources.forEach(filePath => {
       // console.log(filePath)
       const prefix = filePath
-        .replace(/\.(js|json)$/, '')
+        .replace(/\.(js|json|jsonc)$/, '')
         .replace(/\/index$/, '')
         .replace(this.isFile ? path.parse(root).dir : root, '')
 
@@ -75,7 +76,19 @@ class JsonServerRouter {
        */
       // path.resolve 会自动将window 下分割符\，转为 Unix 分隔符/,用以解决 window 下缓存未清除问题
       delete require.cache[path.resolve(filePath)]
-      const routes = mock(require(filePath))
+      let routes = null
+      try {
+        if (path.parse(filePath).ext === '.jsonc') {
+          routes = mock(parse(fs.readFileSync(filePath).toString()))
+        } else {
+          routes = mock(require(filePath))
+        }
+      } catch (error) {
+        console.log(red(`文件解析错误: ${filePath}`))
+        console.log(error)
+        return
+      }
+
       /**
        * 遍历对象键值解析出路径中配置目前就支持get file
        */
@@ -132,7 +145,7 @@ class JsonServerRouter {
   rewrite() {
     let { root, routes } = this.opts
     const router = express.Router()
-    glob.sync(`${root}/**/index.{js,json}`).forEach(filePath => {
+    glob.sync(`${root}/**/index.{js,json,jsonc}`).forEach(filePath => {
       let prefix = path.parse(filePath.replace(root, '')).dir
       // 匹配 /books 或者 /books?xx
       let prefixReg = new RegExp(`(${prefix}\\?[^?/]*)|(^${prefix}$)`)

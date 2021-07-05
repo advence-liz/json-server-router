@@ -182,11 +182,12 @@ Examples:
 jsr .
 jsr mock
 jsr books.json
+jsr books.jsonc
 jsr index.js
 
 
 位置：
-  root  Paths to mock files dir or file            [字符串]
+  root  Paths to mock files dir or file 支持 .json .jsonc .js 三种格式文件           [字符串]
 
 选项：
   --config           Path to config file [string] [default:

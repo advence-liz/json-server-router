@@ -69,7 +69,8 @@ const argv = yargs
       yargs.positional('root', {
         type: 'string',
         // default: '.',
-        describe: 'Paths to mock files dir or file '
+        describe:
+          'Paths to mock files dir or file 支持 .json .jsonc .js 三种格式文件'
       })
     },
     argv => {
