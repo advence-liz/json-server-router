@@ -15,7 +15,8 @@
   - [路由规则](#路由规则)
     - [路由生成规则示意](#路由生成规则示意)
     - [路由生成工具命令](#路由生成工具命令)
-    - [自定义路由 (rewrite)](#自定义路由-rewrite)
+    - [自定义路由](#自定义路由)
+    - [rewrite](#rewrite)
   - [功能介绍](#功能介绍)
     - [Filter](#filter)
     - [Paginate](#paginate)
@@ -164,7 +165,27 @@ $ jsr ro /aaa/bbb/ccc/update # 简写
   }
 }
 ```
-### 自定义路由 (rewrite)
+### 自定义路由
+
+- `name[route='xxx']` --> `prefix/route/name` // `prefix` 文件目录结构 `route` route配置  `name` 对象`key`
+  
+魔法注释中`route`可作为自定义路由前缀,以解决创建多层目录的弊端，假设 `index.json` 内容如下那么将生成路由`/update/more/book`
+
+```js
+// index.json
+{
+  "book[route=/update/more]": {
+    "code": 200,
+    "message": "自定义路由",
+    "data": true
+  },
+  "retrieve": { "code": 200, "message": "succeed", "data": true }
+ 
+}
+```
+
+
+### rewrite
 
 在 jsr.config.js 中添加 routes 字段,注意每个 route 必须以 / 开头
 

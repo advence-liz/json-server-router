@@ -62,8 +62,10 @@ module.exports = function createServer(opts, init) {
     // Converts POST to GET and move payload to query params
     // This way it will make JSON Server that it's GET request
     // 全部请求转换为 get 处理
+    // TODO 已经定义的同 get 未定义的 走 post
     req.method = 'GET'
     req.query = req.body
+
     // }
     // Continue to JSON Server router
     next()
@@ -76,9 +78,9 @@ module.exports = function createServer(opts, init) {
     next()
   })
 
-  app.put('*', handler)
-  app.delete('*', handler)
-  app.post('*', handler)
+  // app.put('*', handler)
+  // app.delete('*', handler)
+  // app.post('*', handler)
   app.use(router.rewrite())
   app.use(router.routes())
 

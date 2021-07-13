@@ -29,6 +29,7 @@ class JsonServerRouter {
     this.forceGet = []
     this.fileUpload = []
     this.templateStore = []
+    this.routeMap = new Map()
     this.$IsInit = true
     this.isFile = false
     this._init()
@@ -93,12 +94,26 @@ class JsonServerRouter {
        * 遍历对象键值解析出路径中配置目前就支持get file
        */
       Object.keys(routes).forEach(key => {
-        let { name: parsedKey, get = false, file = false } = parseName(key)
-        if (get) {
-          routes[parsedKey] = routes[key]
+        let { name: parsedKey, file = false, route = '' } = parseName(key)
+
+        if (route) {
+          const newRoute = path.join(prefix, route)
+          if (this.routeMap.has(newRoute)) {
+            this.routeMap.set(newRoute, {
+              ...this.routeMap.get(newRoute),
+              ...{ [parsedKey]: routes[key] }
+            })
+          } else {
+            this.routeMap.set(newRoute, { [parsedKey]: routes[key] })
+          }
+          this.templateStore.push(
+            new PartTemplate(
+              { [parsedKey]: routes[key] },
+              newRoute,
+              filePath
+            ).render()
+          )
           delete routes[key]
-          this.forceGet.push(path.join(prefix, parsedKey))
-          debug('forceGet', this.forceGet)
         }
         if (file) {
           routes[parsedKey] = routes[key]
@@ -112,6 +127,10 @@ class JsonServerRouter {
         new PartTemplate(routes, prefix, filePath).render()
       )
     })
+    this.routeMap.forEach((val, key) => {
+      this.routeStore.push(new PartRouter(val, key))
+    })
+    console.log(this.routeMap)
   }
   // 注册各个子路由
   routes() {
@@ -176,7 +195,7 @@ function PartTemplate(routes, prefix, filePath) {
   const arr = []
   this.render = () => {
     arr.push(
-      ` <h3 class="bg-primary">${prefix} <span class="glyphicon glyphicon-file" aria-hidden="true"></span> <span class="h6" >${filePath}</span></h3>`
+      ` <h3 class="bg-primary"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> <span class="h6" >${filePath}</span></h3>`
     )
     arr.push('<ul>')
     for (let key in routes) {
