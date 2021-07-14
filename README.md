@@ -118,6 +118,8 @@ module.exports = {
 
 > tips 当遇到名称为 `index` 的文件路径拼接的时候会忽略`index`，当遇见键值为 `index`路径拼接同样也会忽略`index`
 
+- `name` --> `prefix/name` // `prefix` 文件目录结构  `name` 对象`key`
+
 ```bash
 - aaa
   - bbb
