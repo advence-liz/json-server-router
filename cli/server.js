@@ -4,6 +4,7 @@ const fs = require('fs')
 const { blue, red, green } = require('chalk')
 const opn = require('opn')
 const multer = require('multer')
+const rewrite = require('express-urlrewrite')
 const createTemplate = require('../lib/createTemplate')
 
 const JsonServerRouter = require('../index')
@@ -54,6 +55,9 @@ module.exports = function createServer(opts, init) {
     }
     next()
   })
+  // 重定向  /xxx/index ---> /xxxx
+  app.use(rewrite('/*/index', '/$1'))
+
   app.use(function(req, res, next) {
     // const { originalUrl } = req
     // split防止url上有额外query影响匹配规则
