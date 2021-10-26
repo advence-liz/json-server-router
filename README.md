@@ -145,6 +145,9 @@ or
    + bar.json    ------>  /foo/bar/xxx
 ```
 
+- 文件名为`index.{js,json,jsonc}` 生成路由时忽略 `index`
+- `/xxx/aaa/index` 路径指向 `/xxx/aaa`
+
 ### 路由生成工具命令
 
 为了解决复杂路由需要构建复杂目录结构的问题，现提供`$ jsr route <path>` 工具命令以便按照路由规则生成对应目录结构.
