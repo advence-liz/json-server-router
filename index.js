@@ -26,9 +26,10 @@ class JsonServerRouter {
     this.opts.root = path.resolve(this.opts.root)
     debug(this.opts)
     this.routeStore = []
-    this.forceGet = []
+    // 用于常规路由
     this.fileUpload = []
     this.templateStore = []
+    // 用于自定义路由
     this.routeMap = new Map()
     this.$IsInit = true
     this.isFile = false
@@ -89,14 +90,29 @@ class JsonServerRouter {
         console.log(error)
         return
       }
-
       /**
-       * 遍历对象键值解析出路径中配置目前就支持get file
+       * 检测文件内容是否满足 json-server-router 生成路由要求
+       */
+      for (let routeKey of Object.keys(routes)) {
+        // 如果检测到 key 对应的 val 不是对象，则认为整个文件不合规，停止处理该文件
+        if (typeof routes[routeKey] !== 'object') {
+          console.log(
+            red(filePath),
+            green(
+              '不满足 json-server-router 生成路由要求, 文件中 key 对应的 val 必须为对象'
+            )
+          )
+          return
+        }
+      }
+      /**
+       * 遍历对象键值解析出路径中配置目前就支持route file
        */
       Object.keys(routes).forEach(key => {
         let { name: parsedKey, file = false, route = '' } = parseName(key)
-
+        // 自定义路由
         if (route) {
+          console.log(parsedKey, route)
           const newRoute = path.join(prefix, route)
           if (this.routeMap.has(newRoute)) {
             this.routeMap.set(newRoute, {

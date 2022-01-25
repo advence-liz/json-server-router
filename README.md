@@ -172,14 +172,14 @@ $ jsr ro /aaa/bbb/ccc/update # 简写
 ```
 ### 自定义路由
 
-- `name[route='xxx']` --> `prefix/route/name` // `prefix` 文件目录结构 `route` route配置  `name` 对象`key`
-  
-魔法注释中`route`可作为自定义路由前缀,以解决创建多层目录的弊端，假设 `index.json` 内容如下那么将生成路由`/update/more/book`
+- `/aaa/bbb/name` --> `prefix/aaa/bbb/name` // `prefix` 文件目录结构
+
+当对象 key 以`/` 即认为启动自定义路由,以解决创建多层目录的弊端，假设 `index.json` 内容如下那么将生成路由`/update/more/book`
 
 ```js
 // index.json
 {
-  "book[route=/update/more]": {
+  "/update/more/book": {
     "code": 200,
     "message": "自定义路由",
     "data": true
